@@ -24,39 +24,53 @@ namespace ConfigUtility
 		{
 			ModConfig modConfig = JsonHandler.ParseConfigJson();
 
-			for (int i = 0; i < 9; i++)
+			foreach (ConfigTab configTab in modConfig.Tabs)
 			{
-				// Create the new panel
-				Panel newPanel = new Panel();
-				newPanel.Location = pnl_Option.Location;
-				newPanel.Size = pnl_Option.Size;
-
-				// Create the new option label
-				Label newLabel = new Label();
-				newLabel.AutoSize = lbl_OptionName.AutoSize;
-				newLabel.Anchor = lbl_OptionName.Anchor;
-				newLabel.Location = lbl_OptionName.Location;
-				newLabel.Text = "Label " + i;
-				newLabel.Parent = newPanel;
-
-				ComboBox newComboBox = new ComboBox();
-				newComboBox.Anchor = cmb_OptionValue.Anchor;
-				newComboBox.DropDownStyle = cmb_OptionValue.DropDownStyle;
-				newComboBox.FormattingEnabled = cmb_OptionValue.FormattingEnabled;
-				newComboBox.Items.Clear();
-				string[] newItems =
+				foreach (ConfigFlag configFlag in configTab.Flags)
 				{
-					"Disabled",
-					"Enabled"
-				};
-				newComboBox.Items.AddRange(newItems);
-				newComboBox.Location = cmb_OptionValue.Location;
-				newComboBox.Size = cmb_OptionValue.Size;
+					// Create the new panel
+					Panel newPanel = new Panel();
+					newPanel.Location = pnl_Option.Location;
+					newPanel.Size = pnl_Option.Size;
 
-				newPanel.Controls.Add(newLabel);
-				newPanel.Controls.Add(newComboBox);
-				flow_Options.Controls.Add(newPanel);
+					// Create the new option label
+					Label newLabel = new Label();
+					newLabel.AutoSize = lbl_OptionName.AutoSize;
+					newLabel.Anchor = lbl_OptionName.Anchor;
+					newLabel.Location = lbl_OptionName.Location;
+					newLabel.Text = configFlag.Name;
+					newLabel.Parent = newPanel;
+
+					ComboBox newComboBox = new ComboBox();
+					newComboBox.Anchor = cmb_OptionValue.Anchor;
+					newComboBox.DropDownStyle = cmb_OptionValue.DropDownStyle;
+					newComboBox.FormattingEnabled = cmb_OptionValue.FormattingEnabled;
+					newComboBox.Items.Clear();
+					newComboBox.Items.AddRange(configFlag.Values);
+					newComboBox.Location = cmb_OptionValue.Location;
+					newComboBox.Size = cmb_OptionValue.Size;
+					newComboBox.DropDownWidth = DropDownWidth(newComboBox);
+
+					newPanel.Controls.Add(newLabel);
+					newPanel.Controls.Add(newComboBox);
+					flow_Options.Controls.Add(newPanel);
+				}
 			}
+		}
+
+		// Adapted from https://stackoverflow.com/a/4842576
+		int DropDownWidth(ComboBox myCombo)
+		{
+			int maxWidth = 0, temp = 0;
+			foreach (var obj in myCombo.Items)
+			{
+				temp = TextRenderer.MeasureText(obj.ToString(), myCombo.Font).Width;
+				if (temp > maxWidth)
+				{
+					maxWidth = temp;
+				}
+			}
+			return maxWidth;
 		}
 	}
 }

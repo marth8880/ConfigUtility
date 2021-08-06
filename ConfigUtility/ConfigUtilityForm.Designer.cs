@@ -124,6 +124,7 @@ namespace ConfigUtility
             "Disabled",
             "Enabled"});
 			this.cmb_OptionValue.Location = new System.Drawing.Point(482, 6);
+			this.cmb_OptionValue.MinimumSize = new System.Drawing.Size(182, 0);
 			this.cmb_OptionValue.Name = "cmb_OptionValue";
 			this.cmb_OptionValue.Size = new System.Drawing.Size(182, 33);
 			this.cmb_OptionValue.TabIndex = 1;

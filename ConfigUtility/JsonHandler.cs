@@ -35,10 +35,7 @@ namespace ConfigUtility
 					ConfigFlag configFlag = new ConfigFlag();
 					configFlag.Name = (string)flag["name"];
 					configFlag.Path = (string)flag["path"];
-					foreach (var value in flag["values"])
-					{
-						configFlag.Values.Add((string)value);
-					}
+					configFlag.Values = flag["values"].ToObject<string[]>();
 					configFlag.DefaultValue = (int)flag["defaultValue"];
 
 					configTab.Flags.Add(configFlag);
