@@ -104,9 +104,9 @@ namespace ConfigUtility
 			// 
 			// pnl_Option
 			// 
-			this.pnl_Option.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
 			this.pnl_Option.Controls.Add(this.cmb_OptionValue);
 			this.pnl_Option.Controls.Add(this.lbl_OptionName);
+			this.pnl_Option.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.pnl_Option.Location = new System.Drawing.Point(3, 3);
 			this.pnl_Option.MaximumSize = new System.Drawing.Size(0, 45);
 			this.pnl_Option.MinimumSize = new System.Drawing.Size(674, 0);

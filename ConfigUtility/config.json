@@ -1,0 +1,39 @@
+{
+  "configTabs": [
+    {
+      "name": "General",
+      "description": "This page contains general settings that affect the mod and its appearance.",
+      "footnote": "Settings marked with * only affect offline &amp; single-player matches.",
+      "flags": [
+        {
+          "path": "cfg_MEUnificationEnabled",
+          "name": "Toggle Mass Effect: Unification",
+          "values": [
+            "Disabled",
+            "Enabled"
+          ],
+          "defaultValue": 0
+        },
+        {
+          "path": "cfg_CustomGUIEnabled",
+          "name": "Menu Interface Style",
+          "values": [
+            "Star Wars Battlefront II",
+            "Mass Effect: Unification",
+            "Mass Effect 3"
+          ],
+          "defaultValue": 1
+        },
+        {
+          "path": "cfg_CustomHUD",
+          "name": "Menu Interface Style",
+          "values": [
+            "Disabled",
+            "Enabled"
+          ],
+          "defaultValue": 1
+        }
+      ]
+    }
+  ]
+}

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -21,7 +22,8 @@ namespace ConfigUtility
 
 		private void ConfigUtilityForm_Load(object sender, EventArgs e)
 		{
-			//ModConfig modConfig = new ModConfig();
+			ModConfig modConfig = JsonHandler.ParseConfigJson();
+
 			for (int i = 0; i < 9; i++)
 			{
 				// Create the new panel
