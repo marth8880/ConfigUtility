@@ -3,8 +3,8 @@
   "configTabs": [
     {
       "name": "General",
-      "description": "This page contains general settings that affect the mod and its appearance.",
-      "footnote": "Settings marked with * only affect offline &amp; single-player matches.",
+      "description": "This page contains general settings that affect the mod && its appearance.",
+      "footnote": "Settings marked with * only affect offline && single-player matches.",
       "flags": [
         {
           "path": "cfg_MEUnificationEnabled",
@@ -39,7 +39,7 @@
     {
       "name": "Gameplay",
       "description": "This page contains settings that affect the mod's gameplay.",
-      "footnote": "Settings marked with * only affect offline &amp; single-player matches.",
+      "footnote": "Settings marked with * only affect offline && single-player matches.",
       "flags": [
         {
           "path": "cfg_Difficulty",
@@ -102,8 +102,8 @@
     },
     {
       "name": "Factions",
-      "description": "This page contains settings that affect the various factions &amp; heroes.",
-      "footnote": "Settings marked with * only affect offline &amp; single-player matches.",
+      "description": "This page contains settings that affect the various factions && heroes.",
+      "footnote": "Settings marked with * only affect offline && single-player matches.",
       "flags": [
         {
           "path": "cfg_SideVar",
@@ -184,8 +184,8 @@
     },
     {
       "name": "Maps",
-      "description": "This page contains settings that affect the various custom &amp; stock maps.",
-      "footnote": "Settings marked with * only affect offline &amp; single-player matches.",
+      "description": "This page contains settings that affect the various custom && stock maps.",
+      "footnote": "Settings marked with * only affect offline && single-player matches.",
       "flags": [
         {
           "path": "cfg_MapVarEDN",
@@ -213,7 +213,7 @@
     {
       "name": "Audio",
       "description": "This page contains settings that affect audio-related features.",
-      "footnote": "Settings marked with * only affect offline &amp; single-player matches.",
+      "footnote": "Settings marked with * only affect offline && single-player matches.",
       "flags": [
         {
           "path": "cfg_SolMapMusic",
