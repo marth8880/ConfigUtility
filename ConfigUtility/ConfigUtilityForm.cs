@@ -79,7 +79,7 @@ namespace ConfigUtility
 						int oldValue = thisConfigFlag.SavedValue;
 						thisConfigFlag.SavedValue = comboBox.SelectedIndex;
 						ConfigDirty();
-						Debug.WriteLine(string.Format("Selection index changed for {0}, value changed from {1} to {2}", thisConfigFlag.Name, oldValue, comboBox.SelectedIndex));
+						Debug.WriteLine(string.Format("Selection index for {0} changed from {1} to {2}", thisConfigFlag.Name, oldValue, comboBox.SelectedIndex));
 					};
 
 					if (configSaved)
@@ -105,6 +105,15 @@ namespace ConfigUtility
 
 				tabControl1.Controls.Add(tabPage);
 			}
+
+			// Remove the template tab page
+			tabControl1.Controls.Remove(tabPage1);
+		}
+
+		private void btn_Submit_Click(object sender, EventArgs e)
+		{
+			SaveConfig();
+			btn_Submit.Enabled = false;
 		}
 
 		// Adapted from https://stackoverflow.com/a/4842576
@@ -218,12 +227,6 @@ namespace ConfigUtility
 			}
 
 			return false;
-		}
-
-		private void btn_Submit_Click(object sender, EventArgs e)
-		{
-			SaveConfig();
-			btn_Submit.Enabled = false;
 		}
 	}
 }
