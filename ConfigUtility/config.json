@@ -15,7 +15,7 @@
             "Disabled",
             "Enabled"
           ],
-          "defaultValue": 0
+          "defaultValue": 1
         },
         {
           "path": "cfg_CustomGUIEnabled",
