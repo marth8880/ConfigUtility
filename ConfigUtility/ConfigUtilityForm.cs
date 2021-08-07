@@ -16,6 +16,7 @@ namespace ConfigUtility
 		public const string CONFIG_SAVE_FILE_NAME = "ConfigUtility.dat";
 
 		public ModConfig modConfig = new ModConfig();
+		public ModConfigContainer modConfigContainer = new ModConfigContainer();
 
 		public ConfigUtilityForm()
 		{
@@ -25,12 +26,8 @@ namespace ConfigUtility
 		private void ConfigUtilityForm_Load(object sender, EventArgs e)
 		{
 			// Load any existing config
-			bool configSaved = LoadConfig();
-			if (!configSaved)
-			{
-				// Load fresh data
-				modConfig = JsonHandler.ParseConfigJson();
-			}
+			bool configSaved = LoadUserConfig();
+			modConfig = JsonHandler.ParseConfigJson();
 
 			// Generate the tab pages
 			foreach (ConfigTab configTab in modConfig.Tabs)
@@ -75,17 +72,27 @@ namespace ConfigUtility
 					flagValueCombo.SelectionChangeCommitted += delegate (object sender, EventArgs e)
 					{
 						ComboBox comboBox = (ComboBox)sender;
-						ConfigFlag thisConfigFlag = (ConfigFlag)comboBox.Tag;
-						int oldValue = thisConfigFlag.SavedValue;
-						thisConfigFlag.SavedValue = comboBox.SelectedIndex;
+						ConfigFlag senderConfigFlag = (ConfigFlag)comboBox.Tag;
+						int oldValue = -1;
+						if (modConfigContainer.UserConfig.ContainsKey(senderConfigFlag.Path))
+						{
+							oldValue = modConfigContainer.UserConfig[senderConfigFlag.Path];
+							modConfigContainer.UserConfig[senderConfigFlag.Path] = comboBox.SelectedIndex;
+						}
+						else
+						{
+							modConfigContainer.UserConfig.Add(senderConfigFlag.Path, comboBox.SelectedIndex);
+						}
+						
 						ConfigDirty();
-						Debug.WriteLine(string.Format("Selection index for {0} changed from {1} to {2}", thisConfigFlag.Name, oldValue, comboBox.SelectedIndex));
+						Debug.WriteLine(string.Format("Selection index for {0} changed from {1} to {2}", senderConfigFlag.Name, oldValue, comboBox.SelectedIndex));
 					};
 
-					if (configSaved)
-						flagValueCombo.SelectedIndex = configFlag.SavedValue;
-					else
-						flagValueCombo.SelectedIndex = configFlag.DefaultValue;
+					// Ensure the key exists in our local user config dictionary
+					if (!modConfigContainer.UserConfig.ContainsKey(configFlag.Path))
+						modConfigContainer.UserConfig.Add(configFlag.Path, configFlag.DefaultValue);
+
+					flagValueCombo.SelectedIndex = modConfigContainer.UserConfig[configFlag.Path];
 
 					// Calculate new size and location of combobox
 					int extraWidth = 25;	// need to account for the combobox arrow
@@ -112,7 +119,7 @@ namespace ConfigUtility
 
 		private void btn_Submit_Click(object sender, EventArgs e)
 		{
-			SaveConfig();
+			SaveUserConfig();
 			btn_Submit.Enabled = false;
 		}
 
@@ -138,9 +145,8 @@ namespace ConfigUtility
 
 		public void SerializeData(string filePath)
 		{
-			ModConfigContainer saveData = new ModConfigContainer();
+			ModConfigContainer saveData = modConfigContainer;
 			saveData.FileVersion = Properties.Settings.Default.Info_SaveFileVersion;
-			saveData.ConfigData = modConfig;
 
 			// Attempt to save the binary file
 			FileStream fs = new FileStream(filePath,
@@ -205,12 +211,12 @@ namespace ConfigUtility
 			return data;
 		}
 
-		void SaveConfig()
+		void SaveUserConfig()
 		{
 			SerializeData(Directory.GetCurrentDirectory() + "\\" + CONFIG_SAVE_FILE_NAME);
 		}
 
-		bool LoadConfig()
+		bool LoadUserConfig()
 		{
 			string filePath = Directory.GetCurrentDirectory() + "\\" + CONFIG_SAVE_FILE_NAME;
 
@@ -221,7 +227,7 @@ namespace ConfigUtility
 				{
 					return false;
 				}
-				modConfig = data.ConfigData;
+				modConfigContainer = data;
 
 				return true;
 			}

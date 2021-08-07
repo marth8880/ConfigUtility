@@ -8,12 +8,12 @@ namespace ConfigUtility
 	[Serializable]
 	public class ModConfigContainer
 	{
-		public ModConfig ConfigData;
+		public Dictionary<string, int> UserConfig;
 		public int FileVersion;
 
 		public ModConfigContainer()
 		{
-			ConfigData = new ModConfig();
+			UserConfig = new Dictionary<string, int>();
 			FileVersion = 0;
 		}
 	}
