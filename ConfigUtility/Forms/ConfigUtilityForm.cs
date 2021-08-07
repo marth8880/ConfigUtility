@@ -17,6 +17,7 @@ namespace ConfigUtility
 
 		public ModConfig modConfig = new ModConfig();
 		public ModConfigContainer modConfigContainer = new ModConfigContainer();
+		List<ComboBox> comboBoxes = new List<ComboBox>();
 
 		public ConfigUtilityForm()
 		{
@@ -69,7 +70,16 @@ namespace ConfigUtility
 					flagValueCombo.Items.Clear();
 					flagValueCombo.Items.AddRange(configFlag.Values);
 					flagValueCombo.Tag = configFlag;
-					flagValueCombo.SelectionChangeCommitted += delegate (object sender, EventArgs e)
+
+					// Ensure the key exists in our local user config dictionary
+					if (!modConfigContainer.UserConfig.ContainsKey(configFlag.Path))
+						modConfigContainer.UserConfig.Add(configFlag.Path, configFlag.DefaultValue);
+
+					// This needs to happen BEFORE adding the event handler
+					flagValueCombo.SelectedIndex = modConfigContainer.UserConfig[configFlag.Path];
+
+					// Whenever the combobox selection changes, either programmatically or by the user
+					flagValueCombo.SelectedIndexChanged += delegate (object sender, EventArgs e)
 					{
 						ComboBox comboBox = (ComboBox)sender;
 						ConfigFlag senderConfigFlag = (ConfigFlag)comboBox.Tag;
@@ -84,15 +94,9 @@ namespace ConfigUtility
 							modConfigContainer.UserConfig.Add(senderConfigFlag.Path, comboBox.SelectedIndex);
 						}
 						
-						ConfigDirty();
+						ConfigIsDirty();
 						Debug.WriteLine(string.Format("Selection index for {0} changed from {1} to {2}", senderConfigFlag.Name, oldValue, comboBox.SelectedIndex));
 					};
-
-					// Ensure the key exists in our local user config dictionary
-					if (!modConfigContainer.UserConfig.ContainsKey(configFlag.Path))
-						modConfigContainer.UserConfig.Add(configFlag.Path, configFlag.DefaultValue);
-
-					flagValueCombo.SelectedIndex = modConfigContainer.UserConfig[configFlag.Path];
 
 					// Calculate new size and location of combobox
 					int extraWidth = 25;	// need to account for the combobox arrow
@@ -106,6 +110,7 @@ namespace ConfigUtility
 						flagValueCombo.Size = new Size(newWidth, flagValueCombo.Size.Height);
 					}
 					flagValueCombo.DropDownWidth = newWidth;
+					comboBoxes.Add(flagValueCombo);
 
 					flowLayoutPanel.Controls.Add(configFlagControl);
 				}
@@ -138,7 +143,7 @@ namespace ConfigUtility
 			return maxWidth;
 		}
 
-		void ConfigDirty()
+		void ConfigIsDirty()
 		{
 			btn_Submit.Enabled = true;
 		}
@@ -304,6 +309,7 @@ namespace ConfigUtility
 			else
 			{
 				tabControl1.Enabled = false;
+				btn_ResetToDefaults.Enabled = false;
 				Cursor.Current = Cursors.WaitCursor;
 				Application.DoEvents();
 			}
@@ -327,9 +333,26 @@ namespace ConfigUtility
 			else
 			{
 				tabControl1.Enabled = true;
+				btn_ResetToDefaults.Enabled = true;
 				Cursor.Current = Cursors.Default;
 				Application.DoEvents();
 			}
+		}
+
+		private void btn_ResetToDefaults_Click(object sender, EventArgs e)
+		{
+			ResetToDefaults();
+		}
+
+		void ResetToDefaults()
+		{
+			foreach (ComboBox comboBox in comboBoxes)
+			{
+				ConfigFlag configFlag = (ConfigFlag)comboBox.Tag;
+				comboBox.SelectedIndex = configFlag.DefaultValue;
+			}
+
+			ConfigIsDirty();
 		}
 	}
 }

@@ -32,6 +32,7 @@ namespace ConfigUtility
 			this.tabControl1 = new System.Windows.Forms.TabControl();
 			this.tabPage1 = new System.Windows.Forms.TabPage();
 			this.btn_Submit = new System.Windows.Forms.Button();
+			this.btn_ResetToDefaults = new System.Windows.Forms.Button();
 			this.tabControl1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -69,11 +70,23 @@ namespace ConfigUtility
 			this.btn_Submit.UseVisualStyleBackColor = true;
 			this.btn_Submit.Click += new System.EventHandler(this.btn_Submit_Click);
 			// 
+			// btn_ResetToDefaults
+			// 
+			this.btn_ResetToDefaults.AutoSize = true;
+			this.btn_ResetToDefaults.Location = new System.Drawing.Point(12, 412);
+			this.btn_ResetToDefaults.Name = "btn_ResetToDefaults";
+			this.btn_ResetToDefaults.Size = new System.Drawing.Size(156, 35);
+			this.btn_ResetToDefaults.TabIndex = 2;
+			this.btn_ResetToDefaults.Text = "Reset to Defaults";
+			this.btn_ResetToDefaults.UseVisualStyleBackColor = true;
+			this.btn_ResetToDefaults.Click += new System.EventHandler(this.btn_ResetToDefaults_Click);
+			// 
 			// ConfigUtilityForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(746, 459);
+			this.Controls.Add(this.btn_ResetToDefaults);
 			this.Controls.Add(this.btn_Submit);
 			this.Controls.Add(this.tabControl1);
 			this.MinimumSize = new System.Drawing.Size(768, 515);
@@ -82,6 +95,7 @@ namespace ConfigUtility
 			this.Load += new System.EventHandler(this.ConfigUtilityForm_Load);
 			this.tabControl1.ResumeLayout(false);
 			this.ResumeLayout(false);
+			this.PerformLayout();
 
 		}
 
@@ -90,6 +104,7 @@ namespace ConfigUtility
 		private System.Windows.Forms.TabControl tabControl1;
 		private System.Windows.Forms.TabPage tabPage1;
 		private System.Windows.Forms.Button btn_Submit;
+		private System.Windows.Forms.Button btn_ResetToDefaults;
 	}
 }
 
