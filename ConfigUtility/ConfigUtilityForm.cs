@@ -26,35 +26,56 @@ namespace ConfigUtility
 
 			foreach (ConfigTab configTab in modConfig.Tabs)
 			{
+				TabPage tabPage = new TabPage();
+
+				ConfigTabControl configTabControl = new ConfigTabControl();
+				configTabControl.Dock = DockStyle.Fill;
+
+				Label descriptionLabel = (Label)configTabControl.Controls.Find("lbl_Description", true)[0];
+				Label footNoteLabel = (Label)configTabControl.Controls.Find("lbl_FootNote", true)[0];
+				FlowLayoutPanel flowLayoutPanel = (FlowLayoutPanel)configTabControl.Controls.Find("flow_Flags", true)[0];
+
+				descriptionLabel.Text = configTab.Description;
+				footNoteLabel.Text = configTab.FootNote;
+
+				tabPage.Controls.Add(configTabControl);
+				tabPage.Location = new Point(4, 34);
+				tabPage.Name = "tabPage_" + configTab.Name;
+				tabPage.Padding = tabPage1.Padding;
+				tabPage.Size = tabPage1.Size;
+				tabPage.TabIndex = 0;
+				tabPage.Text = configTab.Name;
+				tabPage.UseVisualStyleBackColor = true;
+
 				foreach (ConfigFlag configFlag in configTab.Flags)
 				{
-					// Create the new panel
-					Panel newPanel = new Panel();
-					newPanel.Location = pnl_Option.Location;
-					newPanel.Size = pnl_Option.Size;
+					ConfigFlagControl configFlagControl = new ConfigFlagControl();
+					//configFlagControl.Anchor = AnchorStyles.Left | AnchorStyles.Right;
 
-					// Create the new option label
-					Label newLabel = new Label();
-					newLabel.AutoSize = lbl_OptionName.AutoSize;
-					newLabel.Anchor = lbl_OptionName.Anchor;
-					newLabel.Location = lbl_OptionName.Location;
-					newLabel.Text = configFlag.Name;
-					newLabel.Parent = newPanel;
+					Label flagNameLabel = (Label)configFlagControl.Controls.Find("lbl_FlagName", true)[0];
+					ComboBox flagValueCombo = (ComboBox)configFlagControl.Controls.Find("cmb_FlagValue", true)[0];
 
-					ComboBox newComboBox = new ComboBox();
-					newComboBox.Anchor = cmb_OptionValue.Anchor;
-					newComboBox.DropDownStyle = cmb_OptionValue.DropDownStyle;
-					newComboBox.FormattingEnabled = cmb_OptionValue.FormattingEnabled;
-					newComboBox.Items.Clear();
-					newComboBox.Items.AddRange(configFlag.Values);
-					newComboBox.Location = cmb_OptionValue.Location;
-					newComboBox.Size = cmb_OptionValue.Size;
-					newComboBox.DropDownWidth = DropDownWidth(newComboBox);
+					flagNameLabel.Text = configFlag.Name;
+					flagValueCombo.Items.Clear();
+					flagValueCombo.Items.AddRange(configFlag.Values);
+					//flagValueCombo.Text = flagValueCombo.Items[configFlag.DefaultValue];
 
-					newPanel.Controls.Add(newLabel);
-					newPanel.Controls.Add(newComboBox);
-					flow_Options.Controls.Add(newPanel);
+					// calculate new size and location of combobox
+					int newWidth = DropDownWidth(flagValueCombo);
+					int widthDifference = 0, newLocationX = 0;
+					if (newWidth > flagValueCombo.MinimumSize.Width)
+					{
+						widthDifference = newWidth - flagValueCombo.MinimumSize.Width;
+						newLocationX = flagValueCombo.Location.X - widthDifference;
+						flagValueCombo.Location = new Point(newLocationX, flagValueCombo.Location.Y);
+						flagValueCombo.Size = new Size(newWidth, flagValueCombo.Size.Height);
+					}
+					flagValueCombo.DropDownWidth = newWidth;
+
+					flowLayoutPanel.Controls.Add(configFlagControl);
 				}
+
+				tabControl1.Controls.Add(tabPage);
 			}
 		}
 
