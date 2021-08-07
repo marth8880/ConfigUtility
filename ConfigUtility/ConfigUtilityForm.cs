@@ -1,20 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Linq;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Xml;
-using System.Xml.Schema;
 
 namespace ConfigUtility
 {
 	public partial class ConfigUtilityForm : Form
 	{
+		public const string CONFIG_SAVE_FILE_NAME = "ConfigUtility.dat";
+
+		public ModConfig modConfig = new ModConfig();
+
 		public ConfigUtilityForm()
 		{
 			InitializeComponent();
@@ -22,8 +24,15 @@ namespace ConfigUtility
 
 		private void ConfigUtilityForm_Load(object sender, EventArgs e)
 		{
-			ModConfig modConfig = JsonHandler.ParseConfigJson();
+			// Load any existing config
+			bool configSaved = LoadConfig();
+			if (!configSaved)
+			{
+				// Load fresh data
+				modConfig = JsonHandler.ParseConfigJson();
+			}
 
+			// Generate the tab pages
 			foreach (ConfigTab configTab in modConfig.Tabs)
 			{
 				TabPage tabPage = new TabPage();
@@ -31,6 +40,7 @@ namespace ConfigUtility
 				ConfigTabControl configTabControl = new ConfigTabControl();
 				configTabControl.Dock = DockStyle.Fill;
 
+				// Gather and set the UI controls
 				Label descriptionLabel = (Label)configTabControl.Controls.Find("lbl_Description", true)[0];
 				Label footNoteLabel = (Label)configTabControl.Controls.Find("lbl_FootNote", true)[0];
 				FlowLayoutPanel flowLayoutPanel = (FlowLayoutPanel)configTabControl.Controls.Find("flow_Flags", true)[0];
@@ -38,6 +48,7 @@ namespace ConfigUtility
 				descriptionLabel.Text = configTab.Description;
 				footNoteLabel.Text = configTab.FootNote;
 
+				// Construct the tab page control (this is very dumb)
 				tabPage.Controls.Add(configTabControl);
 				tabPage.Location = new Point(4, 34);
 				tabPage.Name = "tabPage_" + configTab.Name;
@@ -47,21 +58,38 @@ namespace ConfigUtility
 				tabPage.Text = configTab.Name;
 				tabPage.UseVisualStyleBackColor = true;
 
+				// Generate the flag dropdowns
 				foreach (ConfigFlag configFlag in configTab.Flags)
 				{
 					ConfigFlagControl configFlagControl = new ConfigFlagControl();
 					//configFlagControl.Anchor = AnchorStyles.Left | AnchorStyles.Right;
 
+					// Gather and set the UI controls
 					Label flagNameLabel = (Label)configFlagControl.Controls.Find("lbl_FlagName", true)[0];
 					ComboBox flagValueCombo = (ComboBox)configFlagControl.Controls.Find("cmb_FlagValue", true)[0];
 
 					flagNameLabel.Text = configFlag.Name;
 					flagValueCombo.Items.Clear();
 					flagValueCombo.Items.AddRange(configFlag.Values);
-					//flagValueCombo.Text = flagValueCombo.Items[configFlag.DefaultValue];
+					flagValueCombo.Tag = configFlag;
+					flagValueCombo.SelectionChangeCommitted += delegate (object sender, EventArgs e)
+					{
+						ComboBox comboBox = (ComboBox)sender;
+						ConfigFlag thisConfigFlag = (ConfigFlag)comboBox.Tag;
+						int oldValue = thisConfigFlag.SavedValue;
+						thisConfigFlag.SavedValue = comboBox.SelectedIndex;
+						ConfigDirty();
+						Debug.WriteLine(string.Format("Selection index changed for {0}, value changed from {1} to {2}", thisConfigFlag.Name, oldValue, comboBox.SelectedIndex));
+					};
 
-					// calculate new size and location of combobox
-					int newWidth = DropDownWidth(flagValueCombo);
+					if (configSaved)
+						flagValueCombo.SelectedIndex = configFlag.SavedValue;
+					else
+						flagValueCombo.SelectedIndex = configFlag.DefaultValue;
+
+					// Calculate new size and location of combobox
+					int extraWidth = 25;	// need to account for the combobox arrow
+					int newWidth = DropDownWidth(flagValueCombo) + extraWidth;
 					int widthDifference = 0, newLocationX = 0;
 					if (newWidth > flagValueCombo.MinimumSize.Width)
 					{
@@ -92,6 +120,110 @@ namespace ConfigUtility
 				}
 			}
 			return maxWidth;
+		}
+
+		void ConfigDirty()
+		{
+			btn_Submit.Enabled = true;
+		}
+
+		public void SerializeData(string filePath)
+		{
+			ModConfigContainer saveData = new ModConfigContainer();
+			saveData.FileVersion = Properties.Settings.Default.Info_SaveFileVersion;
+			saveData.ConfigData = modConfig;
+
+			// Attempt to save the binary file
+			FileStream fs = new FileStream(filePath,
+				FileMode.Create,
+				FileAccess.Write,
+				FileShare.None);
+			try
+			{
+				// Serialize and save the data
+				IFormatter formatter = new BinaryFormatter();
+				formatter.Serialize(fs, saveData);
+			}
+			catch (SerializationException e)
+			{
+				Trace.WriteLine("Failed to serialize data. Reason: " + e.Message);
+				throw;
+			}
+			catch (IOException e)
+			{
+				Trace.WriteLine(string.Format("Failed to write to file path: \"{0}\". Reason: {1}", filePath, e.Message));
+				throw;
+			}
+			finally
+			{
+				fs.Close();
+			}
+		}
+
+		public ModConfigContainer DeserializeData(string filePath)
+		{
+			ModConfigContainer data = null;
+
+			// Attempt to read the binary file
+			FileStream fs = new FileStream(filePath, FileMode.Open);
+			try
+			{
+				IFormatter formatter = new BinaryFormatter();
+
+				// Deserialize and store the data
+				data = (ModConfigContainer)formatter.Deserialize(fs);
+
+				// Ensure that the save file is compatible with this version of the application
+				if (data.FileVersion < Properties.Settings.Default.Info_SaveFileVersion)
+				{
+					MessageBox.Show(string.Format("Save file {0} is incompatible with this version of the application.", filePath), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				}
+			}
+			catch (SerializationException e)
+			{
+				Trace.WriteLine("Failed to deserialize. Reason: " + e.Message);
+				throw;
+			}
+			catch (IOException e)
+			{
+				MessageBox.Show(string.Format("Failed to read from file path: \"{0}\". Reason: {1}", filePath, e.Message), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+			}
+			finally
+			{
+				fs.Close();
+			}
+
+			return data;
+		}
+
+		void SaveConfig()
+		{
+			SerializeData(Directory.GetCurrentDirectory() + "\\" + CONFIG_SAVE_FILE_NAME);
+		}
+
+		bool LoadConfig()
+		{
+			string filePath = Directory.GetCurrentDirectory() + "\\" + CONFIG_SAVE_FILE_NAME;
+
+			if (File.Exists(filePath))
+			{
+				ModConfigContainer data = DeserializeData(filePath);
+				if (data == null)
+				{
+					return false;
+				}
+				modConfig = data.ConfigData;
+
+				return true;
+			}
+
+			return false;
+		}
+
+		private void btn_Submit_Click(object sender, EventArgs e)
+		{
+			SaveConfig();
+			btn_Submit.Enabled = false;
 		}
 	}
 }

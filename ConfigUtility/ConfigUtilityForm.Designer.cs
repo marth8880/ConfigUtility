@@ -60,12 +60,14 @@ namespace ConfigUtility
 			// btn_Submit
 			// 
 			this.btn_Submit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.btn_Submit.Enabled = false;
 			this.btn_Submit.Location = new System.Drawing.Point(567, 413);
 			this.btn_Submit.Name = "btn_Submit";
 			this.btn_Submit.Size = new System.Drawing.Size(167, 34);
 			this.btn_Submit.TabIndex = 1;
 			this.btn_Submit.Text = "Submit Changes";
 			this.btn_Submit.UseVisualStyleBackColor = true;
+			this.btn_Submit.Click += new System.EventHandler(this.btn_Submit_Click);
 			// 
 			// ConfigUtilityForm
 			// 

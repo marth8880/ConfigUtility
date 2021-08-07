@@ -4,6 +4,7 @@ using System.Text;
 
 namespace ConfigUtility
 {
+	[Serializable]
 	public class ModConfig
 	{
 		public List<ConfigTab> Tabs;
@@ -14,6 +15,7 @@ namespace ConfigUtility
 		}
 	}
 
+	[Serializable]
 	public class ConfigTab
 	{
 		public string Name;
@@ -27,11 +29,13 @@ namespace ConfigUtility
 		}
 	}
 
+	[Serializable]
 	public class ConfigFlag
 	{
 		public string Name;
 		public string Path;
 		public string[] Values;
 		public int DefaultValue;
+		public int SavedValue;
 	}
 }
