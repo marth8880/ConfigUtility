@@ -34,6 +34,245 @@
           "defaultValue": 1
         }
       ]
+    },
+    {
+      "name": "Gameplay",
+      "description": "This page contains settings that affect the mod's gameplay.",
+      "footnote": "Settings marked with * only affect offline &amp; single-player matches.",
+      "flags": [
+        {
+          "path": "cfg_Difficulty",
+          "name": "* Difficulty",
+          "values": [
+            "Casual",
+            "Normal",
+            "Veteran",
+            "Hardcore",
+            "Insanity"
+          ],
+          "defaultValue": 1
+        },
+        {
+          "path": "cfg_CarnageMode",
+          "name": "* Carnage Mode",
+          "values": [
+            "Disabled",
+            "Enabled"
+          ],
+          "defaultValue": 1
+        },
+        {
+          "path": "cfg_AIHeroes",
+          "name": "* AI Heroes",
+          "values": [
+            "Disabled",
+            "Enabled"
+          ],
+          "defaultValue": 1
+        },
+        {
+          "path": "cfg_HealthFunc",
+          "name": "* Health Functionality",
+          "values": [
+            "Auto-Regenerating",
+            "Item Pickups"
+          ],
+          "defaultValue": 0
+        },
+        {
+          "path": "cfg_ShieldFunc",
+          "name": "* Shield Functionality",
+          "values": [
+            "Regenerating",
+            "Item Pickups"
+          ],
+          "defaultValue": 0
+        },
+        {
+          "path": "cfg_ShieldRegen",
+          "name": "* Shield Regen Functionality (Player Only)",
+          "values": [
+            "Automatic",
+            "Deferred"
+          ],
+          "defaultValue": 1
+        }
+      ]
+    },
+    {
+      "name": "Factions",
+      "description": "This page contains settings that affect the various factions &amp; heroes.",
+      "footnote": "Settings marked with * only affect offline &amp; single-player matches.",
+      "flags": [
+        {
+          "path": "cfg_SideVar",
+          "name": "* Faction Combination",
+          "values": [
+            "Random",
+            "Systems Alliance vs. Heretic Geth",
+            "Systems Alliance vs. Collectors",
+            "Evolved Geth vs. Heretic Geth",
+            "Evolved Geth vs. Collectors",
+            "Systems Alliance vs. Reapers"
+          ],
+          "defaultValue": 0
+        },
+        {
+          "path": "cfg_HeroClassSSV",
+          "name": "* Systems Alliance Hero",
+          "values": [
+            "Random",
+            "Commander Shepard",
+            "Jack"
+          ],
+          "defaultValue": 0
+        },
+        {
+          "path": "cfg_HeroClassGTH",
+          "name": "* Heretic Geth Hero",
+          "values": [
+            "Random",
+            "Geth Prime (ME2)",
+            "Geth Prime (ME3)"
+          ],
+          "defaultValue": 0
+        },
+        {
+          "path": "cfg_HeroClassCOL",
+          "name": "* Collectors Hero",
+          "values": [
+            "Random",
+            "Harbinger"
+          ],
+          "defaultValue": 0
+        },
+        {
+          "path": "cfg_HeroClassEVG",
+          "name": "* Evolved Geth Hero",
+          "values": [
+            "Random",
+            "Geth Prime (ME2)",
+            "Geth Prime (ME3)"
+          ],
+          "defaultValue": 0
+        },
+        {
+          "path": "cfg_ShepardGender",
+          "name": "Commander Shepard Gender",
+          "values": [
+            "Random",
+            "Male"
+          ],
+          "defaultValue": 0
+        },
+        {
+          "path": "cfg_ShepardClass",
+          "name": "* Commander Shepard Class",
+          "values": [
+            "Random",
+            "Soldier",
+            "Infiltrator",
+            "Engineer",
+            "Adept",
+            "Sentinel",
+            "Vanguard"
+          ],
+          "defaultValue": 0
+        }
+      ]
+    },
+    {
+      "name": "Maps",
+      "description": "This page contains settings that affect the various custom &amp; stock maps.",
+      "footnote": "Settings marked with * only affect offline &amp; single-player matches.",
+      "flags": [
+        {
+          "path": "cfg_MapVarEDN",
+          "name": "* Eden Prime Weather",
+          "values": [
+            "Random",
+            "Stormy",
+            "Cloudy",
+            "Night"
+          ],
+          "defaultValue": 0
+        },
+        {
+          "path": "cfg_MapVarVRM",
+          "name": "* Virmire Play Area",
+          "values": [
+            "Random",
+            "Upper Level",
+            "Lower Level"
+          ],
+          "defaultValue": 0
+        }
+      ]
+    },
+    {
+      "name": "Audio",
+      "description": "This page contains settings that affect audio-related features.",
+      "footnote": "Settings marked with * only affect offline &amp; single-player matches.",
+      "flags": [
+        {
+          "path": "cfg_SolMapMusic",
+          "name": "'Sol Map Pack' Map Music",
+          "values": [
+            "Unique Ambient Soundscape",
+            "Normal Ambient Music"
+          ],
+          "defaultValue": 0
+        },
+        {
+          "path": "cfg_FactionVO",
+          "name": "Faction Announcer VO",
+          "values": [
+            "Disabled",
+            "Quiet",
+            "Loud"
+          ],
+          "defaultValue": 2
+        },
+        {
+          "path": "cfg_LowHealthSound",
+          "name": "* 'Low Health' Feedback Sounds",
+          "values": [
+            "Disabled",
+            "Enabled"
+          ],
+          "defaultValue": 1
+        },
+        {
+          "path": "cfg_KillSound",
+          "name": "* 'Enemy Killed' Feedback Sounds",
+          "values": [
+            "Disabled",
+            "Quiet",
+            "Loud"
+          ],
+          "defaultValue": 2
+        },
+        {
+          "path": "cfg_PlayerDmgSound",
+          "name": "* 'Player Damaged' Feedback Sounds",
+          "values": [
+            "Disabled",
+            "Quiet",
+            "Loud"
+          ],
+          "defaultValue": 2
+        },
+        {
+          "path": "cfg_HitMarkerSound",
+          "name": "* Hit Marker Sounds",
+          "values": [
+            "Disabled",
+            "Quiet",
+            "Loud"
+          ],
+          "defaultValue": 2
+        }
+      ]
     }
   ]
 }
