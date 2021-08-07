@@ -21,6 +21,8 @@ namespace ConfigUtility
 
 			JObject jObj = JObject.Parse(File.ReadAllText(configPath));
 
+			modConfig.MungedScriptFileName = (string)jObj["mungedScriptFileName"];
+
 			// populate tabs
 			foreach (var tab in jObj["configTabs"])
 			{

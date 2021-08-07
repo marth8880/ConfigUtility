@@ -214,6 +214,7 @@ namespace ConfigUtility
 		void SaveUserConfig()
 		{
 			SerializeData(Directory.GetCurrentDirectory() + "\\" + CONFIG_SAVE_FILE_NAME);
+			MungeChanges();
 		}
 
 		bool LoadUserConfig()
@@ -233,6 +234,96 @@ namespace ConfigUtility
 			}
 
 			return false;
+		}
+
+		void MungeChanges()
+		{
+			string luaScriptPath = Directory.GetCurrentDirectory() + "\\" + modConfig.MungedScriptFileName;
+
+			FileStream fs = new FileStream(luaScriptPath,
+				FileMode.Create,
+				FileAccess.Write,
+				FileShare.None);
+			StreamWriter streamWriter = new StreamWriter(fs);
+			foreach (KeyValuePair<string, int> flag in modConfigContainer.UserConfig)
+			{
+				string line = flag.Key + " = " + flag.Value;
+				streamWriter.WriteLine(line);
+			}
+			streamWriter.Close();
+			fs.Close();
+
+			// Munge!
+			ProcessStartInfo processStartInfo = new ProcessStartInfo();
+			processStartInfo.FileName = Directory.GetCurrentDirectory() + "\\ScriptMunge.exe";
+			processStartInfo.Arguments = string.Format("-inputfile modConfig.lua -continue -platform PC -verbose -debug -outputdir {1}",
+				luaScriptPath,
+				Directory.GetCurrentDirectory());
+			processStartInfo.CreateNoWindow = true;
+			processStartInfo.RedirectStandardOutput = true;
+
+			Process process = new Process();
+			process.StartInfo = processStartInfo;
+			process.EnableRaisingEvents = true;
+			process.OutputDataReceived += (sender, e) =>
+			{
+				Trace.WriteLine(e.Data);
+			};
+			process.Exited += (sender, e) =>
+			{
+				Trace.WriteLine("ScriptMunge finished with exit code " + process.ExitCode + ", cleaning up");
+				File.Delete(luaScriptPath);
+				DisableWorkingStatus();
+			};
+
+			EnableWorkingStatus();
+			process.Start();
+		}
+
+		void EnableWorkingStatus()
+		{
+			EnableWorkingStatus_Proc();
+		}
+
+		delegate void EnableWorkingStatusCallback();
+
+		// WARNING: Don't call this directly, please call `EnableWorkingStatus` instead.
+		void EnableWorkingStatus_Proc()
+		{
+			if (InvokeRequired)
+			{
+				EnableWorkingStatusCallback cb = new EnableWorkingStatusCallback(EnableWorkingStatus_Proc);
+				BeginInvoke(cb);
+			}
+			else
+			{
+				tabControl1.Enabled = false;
+				Cursor.Current = Cursors.WaitCursor;
+				Application.DoEvents();
+			}
+		}
+
+		void DisableWorkingStatus()
+		{
+			DisableWorkingStatus_Proc();
+		}
+
+		delegate void DisableWorkingStatusCallback();
+
+		// WARNING: Don't call this directly, please call `DisableWorkingStatus` instead.
+		void DisableWorkingStatus_Proc()
+		{
+			if (InvokeRequired)
+			{
+				DisableWorkingStatusCallback cb = new DisableWorkingStatusCallback(DisableWorkingStatus_Proc);
+				BeginInvoke(cb);
+			}
+			else
+			{
+				tabControl1.Enabled = true;
+				Cursor.Current = Cursors.Default;
+				Application.DoEvents();
+			}
 		}
 	}
 }

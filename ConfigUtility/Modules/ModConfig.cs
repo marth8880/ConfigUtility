@@ -7,6 +7,7 @@ namespace ConfigUtility
 	public class ModConfig
 	{
 		public List<ConfigTab> Tabs;
+		public string MungedScriptFileName;
 
 		public ModConfig()
 		{
