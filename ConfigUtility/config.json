@@ -1,6 +1,7 @@
 {
   "fileVersion": 1,
   "mungedScriptFileName": "modconfig",
+  "userConfigLuaTableName": "gModConfig",
   "configTabs": [
     {
       "name": "General",

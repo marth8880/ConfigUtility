@@ -238,26 +238,32 @@ namespace ConfigUtility
 
 		void MungeChanges()
 		{
-			string luaScriptPath = Directory.GetCurrentDirectory() + "\\" + modConfig.MungedScriptFileName;
+			string luaScriptFileName = modConfig.MungedScriptFileName + ".lua";
+			string luaScriptPath = Directory.GetCurrentDirectory() + "\\" + luaScriptFileName;
 
+			// Create the Lua script
 			FileStream fs = new FileStream(luaScriptPath,
 				FileMode.Create,
 				FileAccess.Write,
 				FileShare.None);
 			StreamWriter streamWriter = new StreamWriter(fs);
+
+			// Write the config table to the script
+			streamWriter.WriteLine(modConfig.UserConfigLuaTableName + " = {");
 			foreach (KeyValuePair<string, int> flag in modConfigContainer.UserConfig)
 			{
-				string line = flag.Key + " = " + flag.Value;
+				string line = flag.Key + " = " + flag.Value + ",";
 				streamWriter.WriteLine(line);
 			}
+			streamWriter.WriteLine("}");
 			streamWriter.Close();
 			fs.Close();
 
 			// Munge!
 			ProcessStartInfo processStartInfo = new ProcessStartInfo();
 			processStartInfo.FileName = Directory.GetCurrentDirectory() + "\\ScriptMunge.exe";
-			processStartInfo.Arguments = string.Format("-inputfile modConfig.lua -continue -platform PC -verbose -debug -outputdir {1}",
-				luaScriptPath,
+			processStartInfo.Arguments = string.Format("-inputfile {0} -continue -platform PC -verbose -debug -outputdir {1}",
+				luaScriptFileName,
 				Directory.GetCurrentDirectory());
 			processStartInfo.CreateNoWindow = true;
 			processStartInfo.RedirectStandardOutput = true;
