@@ -122,10 +122,10 @@ namespace ConfigUtility
 			tabControl1.Controls.Remove(tabPage1);
 		}
 
-		private void btn_Submit_Click(object sender, EventArgs e)
+		private void btn_SaveChanges_Click(object sender, EventArgs e)
 		{
 			SaveUserConfig();
-			btn_Submit.Enabled = false;
+			btn_SaveChanges.Enabled = false;
 		}
 
 		// Adapted from https://stackoverflow.com/a/4842576
@@ -145,7 +145,7 @@ namespace ConfigUtility
 
 		void ConfigIsDirty()
 		{
-			btn_Submit.Enabled = true;
+			btn_SaveChanges.Enabled = true;
 		}
 
 		public void SerializeData(string filePath)

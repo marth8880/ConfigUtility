@@ -31,7 +31,7 @@ namespace ConfigUtility
 		{
 			this.tabControl1 = new System.Windows.Forms.TabControl();
 			this.tabPage1 = new System.Windows.Forms.TabPage();
-			this.btn_Submit = new System.Windows.Forms.Button();
+			this.btn_SaveChanges = new System.Windows.Forms.Button();
 			this.btn_ResetToDefaults = new System.Windows.Forms.Button();
 			this.tabControl1.SuspendLayout();
 			this.SuspendLayout();
@@ -58,17 +58,17 @@ namespace ConfigUtility
 			this.tabPage1.Text = "tabPage1";
 			this.tabPage1.UseVisualStyleBackColor = true;
 			// 
-			// btn_Submit
+			// btn_SaveChanges
 			// 
-			this.btn_Submit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.btn_Submit.Enabled = false;
-			this.btn_Submit.Location = new System.Drawing.Point(567, 413);
-			this.btn_Submit.Name = "btn_Submit";
-			this.btn_Submit.Size = new System.Drawing.Size(167, 34);
-			this.btn_Submit.TabIndex = 1;
-			this.btn_Submit.Text = "Submit Changes";
-			this.btn_Submit.UseVisualStyleBackColor = true;
-			this.btn_Submit.Click += new System.EventHandler(this.btn_Submit_Click);
+			this.btn_SaveChanges.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.btn_SaveChanges.Enabled = false;
+			this.btn_SaveChanges.Location = new System.Drawing.Point(567, 413);
+			this.btn_SaveChanges.Name = "btn_SaveChanges";
+			this.btn_SaveChanges.Size = new System.Drawing.Size(167, 34);
+			this.btn_SaveChanges.TabIndex = 1;
+			this.btn_SaveChanges.Text = "Save Changes";
+			this.btn_SaveChanges.UseVisualStyleBackColor = true;
+			this.btn_SaveChanges.Click += new System.EventHandler(this.btn_SaveChanges_Click);
 			// 
 			// btn_ResetToDefaults
 			// 
@@ -87,7 +87,7 @@ namespace ConfigUtility
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(746, 459);
 			this.Controls.Add(this.btn_ResetToDefaults);
-			this.Controls.Add(this.btn_Submit);
+			this.Controls.Add(this.btn_SaveChanges);
 			this.Controls.Add(this.tabControl1);
 			this.MinimumSize = new System.Drawing.Size(768, 515);
 			this.Name = "ConfigUtilityForm";
@@ -103,7 +103,7 @@ namespace ConfigUtility
 
 		private System.Windows.Forms.TabControl tabControl1;
 		private System.Windows.Forms.TabPage tabPage1;
-		private System.Windows.Forms.Button btn_Submit;
+		private System.Windows.Forms.Button btn_SaveChanges;
 		private System.Windows.Forms.Button btn_ResetToDefaults;
 	}
 }
