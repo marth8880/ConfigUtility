@@ -54,13 +54,15 @@ namespace ConfigUtility
 			// populate tabs
 			foreach (var tab in jObj["configTabs"])
 			{
+				if (tab.Type != JTokenType.Object)
+					GeneralError("Invalid json token type provided as a tab.");
 				if (tab["name"] == null)
 					DefinitionError("new tab", "name");
 				if (tab["description"] == null)
 					DefinitionError((string)tab["name"], "description");
 				if (tab["footnote"] == null)
 					DefinitionError((string)tab["name"], "footnote");
-				if (tab["flags"] == null)
+				if (tab["flags"] == null || tab["flags"].Type != JTokenType.Array)
 					DefinitionError((string)tab["name"], "flags");
 
 				ConfigTab configTab = new ConfigTab();
@@ -75,7 +77,7 @@ namespace ConfigUtility
 						DefinitionError("new flag", "name");
 					if (flag["path"] == null)
 						DefinitionError((string)flag["name"], "path");
-					if (flag["values"] == null)
+					if (flag["values"] == null || flag["values"].Type != JTokenType.Array)
 						DefinitionError((string)flag["name"], "values");
 					if (flag["defaultValue"] == null)
 						DefinitionError((string)flag["name"], "defaultValue");
@@ -113,13 +115,19 @@ namespace ConfigUtility
 
 		static void DefinitionError(string parentName, string valueType)
 		{
-			MessageBox.Show(string.Format("config.json: No '{0}' definition was found for '{1}'.", valueType, parentName), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+			MessageBox.Show(string.Format("config.json: No or invalid '{0}' definition was found for '{1}'.", valueType, parentName), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 			Environment.Exit(4);
 		}
 
 		static void ValueError(string parentName, string flagName)
 		{
 			MessageBox.Show(string.Format("config.json: Invalid '{0}' value specified for '{1}'.", flagName, parentName), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+			Environment.Exit(4);
+		}
+
+		static void GeneralError(string message)
+		{
+			MessageBox.Show(string.Format("config.json: {0}", message), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 			Environment.Exit(4);
 		}
 	}
