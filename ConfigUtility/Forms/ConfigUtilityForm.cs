@@ -158,30 +158,36 @@ namespace ConfigUtility
 			ModConfigContainer saveData = modConfigContainer;
 			saveData.FileVersion = Properties.Settings.Default.Info_SaveFileVersion;
 
-			// Attempt to save the binary file
-			FileStream fs = new FileStream(filePath,
-				FileMode.Create,
-				FileAccess.Write,
-				FileShare.None);
+			FileStream fs = null;
 			try
 			{
+				// Attempt to save the binary file
+				fs = new FileStream(filePath,
+				   FileMode.Create,
+				   FileAccess.Write,
+				   FileShare.None);
 				// Serialize and save the data
 				IFormatter formatter = new BinaryFormatter();
 				formatter.Serialize(fs, saveData);
 			}
 			catch (SerializationException e)
 			{
-				Trace.WriteLine("Failed to serialize data. Reason: " + e.Message);
-				throw;
+				MessageBox.Show(string.Format("Failed to write to file path: \"{0}\". Reason: {1}", filePath, e.Message), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 			}
 			catch (IOException e)
 			{
-				Trace.WriteLine(string.Format("Failed to write to file path: \"{0}\". Reason: {1}", filePath, e.Message));
-				throw;
+				MessageBox.Show(string.Format("Failed to write to file path: \"{0}\". Reason: {1}", filePath, e.Message), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+			}
+			catch (UnauthorizedAccessException e)
+			{
+				MessageBox.Show(string.Format("Failed to write to file path: \"{0}\". Reason: {1} (File is probably read-only).", filePath, e.Message), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 			}
 			finally
 			{
-				fs.Close();
+				if (fs != null)
+				{
+					fs.Close();
+				}
 			}
 		}
 
@@ -190,9 +196,10 @@ namespace ConfigUtility
 			ModConfigContainer data = null;
 
 			// Attempt to read the binary file
-			FileStream fs = new FileStream(filePath, FileMode.Open);
+			FileStream fs = null;
 			try
 			{
+				fs = new FileStream(filePath, FileMode.Open);
 				IFormatter formatter = new BinaryFormatter();
 
 				// Deserialize and store the data
@@ -206,16 +213,22 @@ namespace ConfigUtility
 			}
 			catch (SerializationException e)
 			{
-				Trace.WriteLine("Failed to deserialize. Reason: " + e.Message);
-				throw;
+				MessageBox.Show(string.Format("Failed to read from file path: \"{0}\". Reason: {1}", filePath, e.Message), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 			}
 			catch (IOException e)
 			{
 				MessageBox.Show(string.Format("Failed to read from file path: \"{0}\". Reason: {1}", filePath, e.Message), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 			}
+			catch (UnauthorizedAccessException e)
+			{
+				MessageBox.Show(string.Format("Failed to read from file path: \"{0}\". Reason: {1} (File is probably read-only).", filePath, e.Message), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+			}
 			finally
 			{
-				fs.Close();
+				if (fs != null)
+				{
+					fs.Close();
+				}
 			}
 
 			return data;
