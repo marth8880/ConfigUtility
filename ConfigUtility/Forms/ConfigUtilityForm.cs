@@ -98,18 +98,20 @@ namespace ConfigUtility
 						Debug.WriteLine(string.Format("Selection index for {0} changed from {1} to {2}", senderConfigFlag.Name, oldValue, comboBox.SelectedIndex));
 					};
 
+					/// TODO: https://github.com/marth8880/ConfigUtility/issues/4
 					// Calculate new size and location of combobox
-					int extraWidth = 25;	// need to account for the combobox arrow
-					int newWidth = DropDownWidth(flagValueCombo) + extraWidth;
-					int widthDifference = 0, newLocationX = 0;
-					if (newWidth > flagValueCombo.MinimumSize.Width)
-					{
-						widthDifference = newWidth - flagValueCombo.MinimumSize.Width;
-						newLocationX = flagValueCombo.Location.X - widthDifference;
-						flagValueCombo.Location = new Point(newLocationX, flagValueCombo.Location.Y);
-						flagValueCombo.Size = new Size(newWidth, flagValueCombo.Size.Height);
-					}
-					flagValueCombo.DropDownWidth = newWidth;
+					//int extraWidth = 25;	// need to account for the combobox arrow
+					//int newWidth = GetPreferredDropDownWidth(flagValueCombo) + extraWidth;
+					//int widthDifference = 0, newLocationX = 0;
+					//if (newWidth > flagValueCombo.MinimumSize.Width)
+					//{
+					//	widthDifference = newWidth - flagValueCombo.MinimumSize.Width;
+					//	newLocationX = flagValueCombo.Location.X - widthDifference;
+					//	flagValueCombo.Location = new Point(newLocationX, flagValueCombo.Location.Y);
+					//	flagValueCombo.Size = new Size(newWidth, flagValueCombo.Size.Height);
+					//}
+					//flagValueCombo.DropDownWidth = newWidth;
+					flagValueCombo.DropDownWidth = GetPreferredDropDownWidth(flagValueCombo);
 					comboBoxes.Add(flagValueCombo);
 
 					flowLayoutPanel.Controls.Add(configFlagControl);
@@ -134,7 +136,7 @@ namespace ConfigUtility
 		}
 
 		// Adapted from https://stackoverflow.com/a/4842576
-		int DropDownWidth(ComboBox myCombo)
+		int GetPreferredDropDownWidth(ComboBox myCombo)
 		{
 			int maxWidth = 0, temp = 0;
 			foreach (var obj in myCombo.Items)
