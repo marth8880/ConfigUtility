@@ -33,6 +33,7 @@ namespace ConfigUtility
 			this.tabPage1 = new System.Windows.Forms.TabPage();
 			this.btn_SaveChanges = new System.Windows.Forms.Button();
 			this.btn_ResetToDefaults = new System.Windows.Forms.Button();
+			this.btn_About = new System.Windows.Forms.Button();
 			this.tabControl1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -72,9 +73,9 @@ namespace ConfigUtility
 			// 
 			// btn_ResetToDefaults
 			// 
-			this.btn_ResetToDefaults.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.btn_ResetToDefaults.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.btn_ResetToDefaults.AutoSize = true;
-			this.btn_ResetToDefaults.Location = new System.Drawing.Point(12, 412);
+			this.btn_ResetToDefaults.Location = new System.Drawing.Point(405, 412);
 			this.btn_ResetToDefaults.Name = "btn_ResetToDefaults";
 			this.btn_ResetToDefaults.Size = new System.Drawing.Size(156, 35);
 			this.btn_ResetToDefaults.TabIndex = 2;
@@ -82,11 +83,23 @@ namespace ConfigUtility
 			this.btn_ResetToDefaults.UseVisualStyleBackColor = true;
 			this.btn_ResetToDefaults.Click += new System.EventHandler(this.btn_ResetToDefaults_Click);
 			// 
+			// btn_About
+			// 
+			this.btn_About.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.btn_About.Location = new System.Drawing.Point(12, 413);
+			this.btn_About.Name = "btn_About";
+			this.btn_About.Size = new System.Drawing.Size(112, 34);
+			this.btn_About.TabIndex = 3;
+			this.btn_About.Text = "About";
+			this.btn_About.UseVisualStyleBackColor = true;
+			this.btn_About.Click += new System.EventHandler(this.btn_About_Click);
+			// 
 			// ConfigUtilityForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(746, 459);
+			this.Controls.Add(this.btn_About);
 			this.Controls.Add(this.btn_ResetToDefaults);
 			this.Controls.Add(this.btn_SaveChanges);
 			this.Controls.Add(this.tabControl1);
@@ -106,6 +119,7 @@ namespace ConfigUtility
 		private System.Windows.Forms.TabPage tabPage1;
 		private System.Windows.Forms.Button btn_SaveChanges;
 		private System.Windows.Forms.Button btn_ResetToDefaults;
+		private System.Windows.Forms.Button btn_About;
 	}
 }
 

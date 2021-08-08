@@ -4,11 +4,18 @@
     <OutputType>WinExe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <UseWindowsForms>true</UseWindowsForms>
-    <Copyright>Aaron Gilbert 2021 All Rights Reserved</Copyright>
+    <Copyright>Copyright © 2021 Aaron Gilbert, All Rights Reserved</Copyright>
     <PackageProjectUrl>https://github.com/marth8880/ConfigUtility</PackageProjectUrl>
     <RepositoryUrl>https://github.com/marth8880/ConfigUtility</RepositoryUrl>
     <Authors>Aaron Gilbert</Authors>
+    <Product>Configuration Utility</Product>
+    <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="luac.exe" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
@@ -26,9 +33,6 @@
     <None Update="config.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="luac.exe">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Update="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -36,6 +40,13 @@
     <None Update="ScriptMunge.exe">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <EmbeddedResource Include="..\LICENSE.md">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </EmbeddedResource>
+    <EmbeddedResource Include="luac.exe">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </EmbeddedResource>
   </ItemGroup>
 
 </Project>

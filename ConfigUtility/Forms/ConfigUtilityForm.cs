@@ -136,6 +136,12 @@ namespace ConfigUtility
 			ResetToDefaults();
 		}
 
+		private void btn_About_Click(object sender, EventArgs e)
+		{
+			Forms.AboutBox aboutBox = new Forms.AboutBox();
+			aboutBox.ShowDialog();
+		}
+
 		// Adapted from https://stackoverflow.com/a/4842576
 		int GetPreferredDropDownWidth(ComboBox myCombo)
 		{
