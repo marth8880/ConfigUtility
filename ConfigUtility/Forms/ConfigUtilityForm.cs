@@ -340,6 +340,7 @@ namespace ConfigUtility
 				tabControl1.Enabled = false;
 				btn_ResetToDefaults.Enabled = false;
 				btn_About.Enabled = false;
+
 				Application.UseWaitCursor = true;
 				Application.DoEvents();
 			}
@@ -365,8 +366,9 @@ namespace ConfigUtility
 				tabControl1.Enabled = true;
 				btn_ResetToDefaults.Enabled = true;
 				btn_About.Enabled = true;
+
 				Application.UseWaitCursor = false;
-				Cursor.Current = Cursors.Default;
+				Cursor.Current = Cursors.Default;	// without this the cursor doesn't reset until it's moved
 				Application.DoEvents();
 			}
 		}
