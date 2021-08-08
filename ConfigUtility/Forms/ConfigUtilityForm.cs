@@ -99,7 +99,8 @@ namespace ConfigUtility
 						Debug.WriteLine(string.Format("Selection index for {0} changed from {1} to {2}", senderConfigFlag.Name, oldValue, comboBox.SelectedIndex));
 					};
 
-					/// TODO: https://github.com/marth8880/ConfigUtility/issues/4
+					/// TODO: The width of all ComboBoxes in a tab page should be based on the widest one 
+					///  https://github.com/marth8880/ConfigUtility/issues/4
 					// Calculate new size and location of combobox
 					//int extraWidth = 25;	// need to account for the combobox arrow
 					//int newWidth = GetPreferredDropDownWidth(flagValueCombo) + extraWidth;
