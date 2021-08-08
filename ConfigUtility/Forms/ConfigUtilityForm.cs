@@ -128,6 +128,11 @@ namespace ConfigUtility
 			btn_SaveChanges.Enabled = false;
 		}
 
+		private void btn_ResetToDefaults_Click(object sender, EventArgs e)
+		{
+			ResetToDefaults();
+		}
+
 		// Adapted from https://stackoverflow.com/a/4842576
 		int DropDownWidth(ComboBox myCombo)
 		{
@@ -337,11 +342,6 @@ namespace ConfigUtility
 				Cursor.Current = Cursors.Default;
 				Application.DoEvents();
 			}
-		}
-
-		private void btn_ResetToDefaults_Click(object sender, EventArgs e)
-		{
-			ResetToDefaults();
 		}
 
 		void ResetToDefaults()
