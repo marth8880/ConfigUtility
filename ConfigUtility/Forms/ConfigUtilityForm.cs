@@ -16,7 +16,8 @@ namespace ConfigUtility
 		public const string CONFIG_SAVE_FILE_NAME = "ConfigUtility.dat";
 
 		public ModConfig modConfig = new ModConfig();
-		public ModConfigContainer modConfigContainer = new ModConfigContainer();
+
+		ModConfigContainer modConfigContainer = new ModConfigContainer();
 		List<ComboBox> comboBoxes = new List<ComboBox>();
 
 		public ConfigUtilityForm()
