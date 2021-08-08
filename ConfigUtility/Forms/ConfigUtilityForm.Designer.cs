@@ -72,6 +72,7 @@ namespace ConfigUtility
 			// 
 			// btn_ResetToDefaults
 			// 
+			this.btn_ResetToDefaults.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.btn_ResetToDefaults.AutoSize = true;
 			this.btn_ResetToDefaults.Location = new System.Drawing.Point(12, 412);
 			this.btn_ResetToDefaults.Name = "btn_ResetToDefaults";
