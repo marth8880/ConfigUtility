@@ -55,7 +55,7 @@ namespace ConfigUtility.Forms
 			this.tableLayoutPanel.Controls.Add(this.okButton, 1, 5);
 			this.tableLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel.Location = new System.Drawing.Point(14, 16);
-			this.tableLayoutPanel.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+			this.tableLayoutPanel.Margin = new System.Windows.Forms.Padding(6);
 			this.tableLayoutPanel.Name = "tableLayoutPanel";
 			this.tableLayoutPanel.RowCount = 6;
 			this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10F));
@@ -72,7 +72,7 @@ namespace ConfigUtility.Forms
 			this.logoPictureBox.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.logoPictureBox.Image = ((System.Drawing.Image)(resources.GetObject("logoPictureBox.Image")));
 			this.logoPictureBox.Location = new System.Drawing.Point(6, 6);
-			this.logoPictureBox.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+			this.logoPictureBox.Margin = new System.Windows.Forms.Padding(6);
 			this.logoPictureBox.Name = "logoPictureBox";
 			this.tableLayoutPanel.SetRowSpan(this.logoPictureBox, 6);
 			this.logoPictureBox.Size = new System.Drawing.Size(218, 500);
@@ -148,7 +148,7 @@ namespace ConfigUtility.Forms
 			this.okButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.okButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			this.okButton.Location = new System.Drawing.Point(566, 466);
-			this.okButton.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+			this.okButton.Margin = new System.Windows.Forms.Padding(6);
 			this.okButton.Name = "okButton";
 			this.okButton.Size = new System.Drawing.Size(126, 40);
 			this.okButton.TabIndex = 24;
@@ -162,7 +162,7 @@ namespace ConfigUtility.Forms
 			this.ClientSize = new System.Drawing.Size(726, 544);
 			this.Controls.Add(this.tableLayoutPanel);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-			this.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+			this.Margin = new System.Windows.Forms.Padding(6);
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
 			this.Name = "AboutBox";
