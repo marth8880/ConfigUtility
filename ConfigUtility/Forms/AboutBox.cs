@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -14,7 +15,7 @@ namespace ConfigUtility.Forms
 		public AboutBox()
 		{
 			InitializeComponent();
-			this.Text = String.Format("About {0}", AssemblyTitle);
+			this.Text = String.Format("About {0}", AssemblyProduct);
 			this.labelProductName.Text = AssemblyProduct;
 			this.labelVersion.Text = String.Format("Version {0}", AssemblyVersion);
 			this.labelCopyright.Text = AssemblyCopyright;
@@ -113,7 +114,12 @@ namespace ConfigUtility.Forms
 
 		private void AboutBox_Load(object sender, EventArgs e)
 		{
+			logoPictureBox.Cursor = Cursors.Hand;
+		}
 
+		private void logoPictureBox_Click(object sender, EventArgs e)
+		{
+			Process.Start(new ProcessStartInfo(ConfigUtilityForm.PROJECT_URL) { UseShellExecute = true });
 		}
 	}
 }

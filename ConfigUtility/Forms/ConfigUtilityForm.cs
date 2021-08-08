@@ -14,6 +14,7 @@ namespace ConfigUtility
 	public partial class ConfigUtilityForm : Form
 	{
 		public const string CONFIG_SAVE_FILE_NAME = "ConfigUtility.dat";
+		public const string PROJECT_URL = "https://github.com/marth8880/ConfigUtility";
 
 		public ModConfig modConfig = new ModConfig();
 
