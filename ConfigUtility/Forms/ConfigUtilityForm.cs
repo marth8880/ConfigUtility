@@ -75,7 +75,7 @@ namespace ConfigUtility
 					if (!modConfigContainer.UserConfig.ContainsKey(configFlag.Path))
 						modConfigContainer.UserConfig.Add(configFlag.Path, configFlag.DefaultValue);
 
-					// This needs to happen BEFORE adding the event handler
+					// This needs to happen BEFORE adding the event handler otherwise it'll raise it
 					flagValueCombo.SelectedIndex = modConfigContainer.UserConfig[configFlag.Path];
 
 					// Whenever the combobox selection changes, either programmatically or by the user
