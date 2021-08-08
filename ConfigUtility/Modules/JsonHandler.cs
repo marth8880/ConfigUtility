@@ -58,10 +58,6 @@ namespace ConfigUtility
 					GeneralError("Invalid json token type provided as a tab.");
 				if (tab["name"] == null)
 					DefinitionError("new tab", "name");
-				if (tab["description"] == null)
-					DefinitionError((string)tab["name"], "description");
-				if (tab["footnote"] == null)
-					DefinitionError((string)tab["name"], "footnote");
 				if (tab["flags"] == null || tab["flags"].Type != JTokenType.Array)
 					DefinitionError((string)tab["name"], "flags");
 
