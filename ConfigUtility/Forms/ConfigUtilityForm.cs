@@ -338,7 +338,8 @@ namespace ConfigUtility
 			{
 				tabControl1.Enabled = false;
 				btn_ResetToDefaults.Enabled = false;
-				Cursor.Current = Cursors.WaitCursor;
+				btn_About.Enabled = false;
+				Application.UseWaitCursor = true;
 				Application.DoEvents();
 			}
 		}
@@ -362,6 +363,8 @@ namespace ConfigUtility
 			{
 				tabControl1.Enabled = true;
 				btn_ResetToDefaults.Enabled = true;
+				btn_About.Enabled = true;
+				Application.UseWaitCursor = false;
 				Cursor.Current = Cursors.Default;
 				Application.DoEvents();
 			}
