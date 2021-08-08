@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5.0-windows</TargetFramework>
     <UseWindowsForms>true</UseWindowsForms>
     <Copyright>Copyright © 2021 Aaron Gilbert, All Rights Reserved</Copyright>
     <PackageProjectUrl>https://github.com/marth8880/ConfigUtility</PackageProjectUrl>
