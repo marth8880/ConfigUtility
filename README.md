@@ -4,6 +4,38 @@ This is a tool that enables Star Wars Battlefront II mod authors to allow player
 
 Mod authors can set up tabs and dropdown settings through a simple JSON file, cleverly called `config.json`. When a player changes a setting, the settings are saved and munged into a single `.SCRIPT` file as a global Lua table. The settings are simple key(string)-value(number) pairs in the table.
 
+## Config.JSON
+
+The tabs and settings are configured through the bundled `config.json` file. Please see [HERE](https://cheatography.com/gaston/cheat-sheets/json/ "JSON cheat sheet") for more about JSON syntax (but really it's pretty simple).
+
+Under the first pair of brackets, here are the following fields:
+
+| Field | Type | Required | Comment |  
+|---|---|---|---|  
+| fileVersion | Integer | Yes |  | 
+| mungedScriptFileName | String | Yes | File name of the `.SCRIPT` file that gets munged |  
+| userConfigLuaTableName | String | Yes | Name of the Lua table that gets compiled into the `.SCRIPT` file |  
+| configTabs | Array (objects) | Yes | Collection of tab descriptors |  
+
+An object in the `configTabs` array can have the following fields:
+
+| Field | Type | Required | Comment |  
+|---|---|---|---|  
+| name | String | Yes | Text name of the tab as displayed in the tab bar |  
+| description | String | No | Text description that gets displayed at the top of the tab page |  
+| footnote | String | No | Text description that gets displayed at the bottom of the tab page |  
+| flags | Array (objects) | Yes | Collection of setting descriptors |  
+
+An object in the `flags` array can have the following fields:
+
+| Field | Type | Required | Comment |  
+|---|---|---|---|  
+| path | String | Yes | Unique name (a-Z characters only) of the Lua table element that this setting's value gets stored in |  
+| name | String | Yes | Text name of the setting that gets displayed next to the setting's dropdown box |  
+| toolTipCaption | String | No | Text description of the setting that gets displayed in a tooltip bubble when hovering over the setting's dropdown or name label |  
+| values | Array (strings) | Yes | Text names of the setting's possible values, which are shown in the dropdown menu box |  
+| defaultValue | Integer | Yes | Default value for the setting, which corresponds with the ordering of the `values` array elements - for example, in an array of `["Apple, "Banana", "Orange"]`, a `defaultValue` of 2 would make the default setting `Orange` |  
+
 ## Examples
 
 Consider the following JSON config file:
