@@ -147,10 +147,10 @@ namespace ConfigUtility.Forms
 			// 
 			this.okButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.okButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.okButton.Location = new System.Drawing.Point(566, 466);
+			this.okButton.Location = new System.Drawing.Point(566, 472);
 			this.okButton.Margin = new System.Windows.Forms.Padding(6);
 			this.okButton.Name = "okButton";
-			this.okButton.Size = new System.Drawing.Size(126, 40);
+			this.okButton.Size = new System.Drawing.Size(126, 34);
 			this.okButton.TabIndex = 24;
 			this.okButton.Text = "&OK";
 			// 
