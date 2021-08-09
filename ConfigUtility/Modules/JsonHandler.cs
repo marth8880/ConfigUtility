@@ -84,6 +84,9 @@ namespace ConfigUtility
 					configFlag.Values = flag["values"].ToObject<string[]>();
 					configFlag.DefaultValue = (int)flag["defaultValue"];
 
+					if (flag["toolTipCaption"] != null)
+						configFlag.ToolTipCaption = (string)flag["toolTipCaption"];
+
 					if (configFlag.Values.Length == 0)
 					{
 						ValueError(configFlag.Name, "values");

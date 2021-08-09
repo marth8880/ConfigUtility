@@ -31,5 +31,14 @@ namespace ConfigUtility.Properties {
                 return ((int)(this["Info_SaveFileVersion"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("10000")]
+        public int TooltipPopDelay {
+            get {
+                return ((int)(this["TooltipPopDelay"]));
+            }
+        }
     }
 }

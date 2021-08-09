@@ -28,6 +28,7 @@ namespace ConfigUtility.Forms
 		/// </summary>
 		private void InitializeComponent()
 		{
+			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AboutBox));
 			this.tableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
 			this.logoPictureBox = new System.Windows.Forms.PictureBox();
@@ -37,6 +38,7 @@ namespace ConfigUtility.Forms
 			this.labelCompanyName = new System.Windows.Forms.Label();
 			this.textBoxDescription = new System.Windows.Forms.TextBox();
 			this.okButton = new System.Windows.Forms.Button();
+			this.toolTips = new System.Windows.Forms.ToolTip(this.components);
 			this.tableLayoutPanel.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.logoPictureBox)).BeginInit();
 			this.SuspendLayout();
@@ -189,5 +191,6 @@ namespace ConfigUtility.Forms
 		private System.Windows.Forms.Label labelCompanyName;
 		private System.Windows.Forms.TextBox textBoxDescription;
 		private System.Windows.Forms.Button okButton;
+		private System.Windows.Forms.ToolTip toolTips;
 	}
 }

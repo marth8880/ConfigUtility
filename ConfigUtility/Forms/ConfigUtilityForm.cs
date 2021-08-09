@@ -28,6 +28,8 @@ namespace ConfigUtility
 
 		private void ConfigUtilityForm_Load(object sender, EventArgs e)
 		{
+			SetToolTips();
+
 			// Load any existing config
 			bool configSaved = LoadUserConfig();
 			modConfig = JsonHandler.ParseConfigJson();
@@ -72,6 +74,12 @@ namespace ConfigUtility
 					flagValueCombo.Items.Clear();
 					flagValueCombo.Items.AddRange(configFlag.Values);
 					flagValueCombo.Tag = configFlag;
+
+					if (configFlag.ToolTipCaption != "")
+					{
+						toolTips.SetToolTip(flagNameLabel, configFlag.ToolTipCaption);
+						toolTips.SetToolTip(flagValueCombo, configFlag.ToolTipCaption);
+					}
 
 					// Ensure the key exists in our local user config dictionary
 					if (!modConfigContainer.UserConfig.ContainsKey(configFlag.Path))
@@ -382,6 +390,14 @@ namespace ConfigUtility
 			}
 
 			ConfigIsDirty();
+		}
+
+		void SetToolTips()
+		{
+			toolTips.AutoPopDelay = Properties.Settings.Default.TooltipPopDelay;
+			toolTips.SetToolTip(btn_SaveChanges, "Save setting changes to disk.");
+			toolTips.SetToolTip(btn_ResetToDefaults, "Reset settings to their default values.");
+			toolTips.SetToolTip(btn_About, "See more info about the application.");
 		}
 	}
 }

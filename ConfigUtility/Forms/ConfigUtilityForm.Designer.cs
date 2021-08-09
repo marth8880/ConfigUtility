@@ -29,12 +29,14 @@ namespace ConfigUtility
 		/// </summary>
 		private void InitializeComponent()
 		{
+			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ConfigUtilityForm));
 			this.tabControl1 = new System.Windows.Forms.TabControl();
 			this.tabPage1 = new System.Windows.Forms.TabPage();
 			this.btn_SaveChanges = new System.Windows.Forms.Button();
 			this.btn_ResetToDefaults = new System.Windows.Forms.Button();
 			this.btn_About = new System.Windows.Forms.Button();
+			this.toolTips = new System.Windows.Forms.ToolTip(this.components);
 			this.tabControl1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -54,7 +56,7 @@ namespace ConfigUtility
 			// 
 			this.tabPage1.Location = new System.Drawing.Point(4, 34);
 			this.tabPage1.Name = "tabPage1";
-			this.tabPage1.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+			this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
 			this.tabPage1.Size = new System.Drawing.Size(713, 357);
 			this.tabPage1.TabIndex = 0;
 			this.tabPage1.Text = "tabPage1";
@@ -122,6 +124,7 @@ namespace ConfigUtility
 		private System.Windows.Forms.Button btn_SaveChanges;
 		private System.Windows.Forms.Button btn_ResetToDefaults;
 		private System.Windows.Forms.Button btn_About;
+		private System.Windows.Forms.ToolTip toolTips;
 	}
 }
 

@@ -33,6 +33,7 @@ namespace ConfigUtility
 	{
 		public string Name;
 		public string Path;
+		public string ToolTipCaption = "";
 		public string[] Values;
 		public int DefaultValue;
 	}

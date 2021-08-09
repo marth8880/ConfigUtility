@@ -114,12 +114,19 @@ namespace ConfigUtility.Forms
 
 		private void AboutBox_Load(object sender, EventArgs e)
 		{
+			SetToolTips();
 			logoPictureBox.Cursor = Cursors.Hand;
 		}
 
 		private void logoPictureBox_Click(object sender, EventArgs e)
 		{
 			Process.Start(new ProcessStartInfo(ConfigUtilityForm.PROJECT_URL) { UseShellExecute = true });
+		}
+
+		void SetToolTips()
+		{
+			toolTips.AutoPopDelay = Properties.Settings.Default.TooltipPopDelay;
+			toolTips.SetToolTip(logoPictureBox, "Open Configuration Utility's project page on GitHub in your web browser.");
 		}
 	}
 }

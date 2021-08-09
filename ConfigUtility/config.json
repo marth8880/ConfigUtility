@@ -11,6 +11,7 @@
         {
           "path": "cfg_MEUnificationEnabled",
           "name": "Toggle Mass Effect: Unification",
+          "toolTipCaption": "Whether or not the mod's missions should be added to the game.",
           "values": [
             "Disabled",
             "Enabled"
