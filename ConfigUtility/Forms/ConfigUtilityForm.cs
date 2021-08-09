@@ -85,8 +85,12 @@ namespace ConfigUtility
 					if (!modConfigContainer.UserConfig.ContainsKey(configFlag.Path))
 						modConfigContainer.UserConfig.Add(configFlag.Path, configFlag.DefaultValue);
 
+					// Ensure a higher value than possible wasn't set in the saved config
 					// This needs to happen BEFORE adding the event handler otherwise it'll raise it
-					flagValueCombo.SelectedIndex = modConfigContainer.UserConfig[configFlag.Path];
+					if (modConfigContainer.UserConfig[configFlag.Path] >= configFlag.Values.Length)
+						flagValueCombo.SelectedIndex = configFlag.DefaultValue;
+					else
+						flagValueCombo.SelectedIndex = modConfigContainer.UserConfig[configFlag.Path];
 
 					// Whenever the combobox selection changes, either programmatically or by the user
 					flagValueCombo.SelectedIndexChanged += delegate (object sender, EventArgs e)
@@ -180,16 +184,25 @@ namespace ConfigUtility
 			FileStream fs = null;
 			try
 			{
-				// Attempt to save the binary file
+				// Attempt to save the text file
 				fs = new FileStream(filePath,
 				   FileMode.Create,
 				   FileAccess.Write,
 				   FileShare.None);
-				// Serialize and save the data
-				IFormatter formatter = new BinaryFormatter();
-				formatter.Serialize(fs, saveData);
+
+				// Serialize the data as text and save it
+				StreamWriter streamWriter = new StreamWriter(fs);
+
+				// First line must always be the file version
+				streamWriter.WriteLine(string.Format("{0}={1}", "FileVersion", saveData.FileVersion));
+				foreach (KeyValuePair<string, int> flag in saveData.UserConfig)
+				{
+					streamWriter.WriteLine(string.Format("{0}={1}", flag.Key, flag.Value));
+				}
+				streamWriter.Close();
+				fs.Close();
 			}
-			catch (SerializationException e)
+			catch (IndexOutOfRangeException e)
 			{
 				MessageBox.Show(string.Format("Failed to write to file path: \"{0}\". Reason: {1}", filePath, e.Message), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 			}
@@ -219,10 +232,29 @@ namespace ConfigUtility
 			try
 			{
 				fs = new FileStream(filePath, FileMode.Open);
-				IFormatter formatter = new BinaryFormatter();
+				data = new ModConfigContainer();
 
 				// Deserialize and store the data
-				data = (ModConfigContainer)formatter.Deserialize(fs);
+				StreamReader streamReader = new StreamReader(fs);
+				int lineNum = 0;
+				string line;
+				while ((line = streamReader.ReadLine()) != null)
+				{
+					string[] parsedLine = line.Split('=');
+
+					if (lineNum == 0)
+					{
+						data.FileVersion = Convert.ToInt32(parsedLine[1]);
+					}
+					else
+					{
+						data.UserConfig.Add(parsedLine[0], Convert.ToInt32(parsedLine[1]));
+					}
+
+					lineNum++;
+				}
+				streamReader.Close();
+				fs.Close();
 
 				// Ensure that the save file is compatible with this version of the application
 				if (data.FileVersion < Properties.Settings.Default.Info_SaveFileVersion)
@@ -230,17 +262,21 @@ namespace ConfigUtility
 					MessageBox.Show(string.Format("Save file {0} is incompatible with this version of the application.", filePath), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 				}
 			}
-			catch (SerializationException e)
+			catch (IndexOutOfRangeException e)
 			{
-				MessageBox.Show(string.Format("Failed to read from file path: \"{0}\". Reason: {1}", filePath, e.Message), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				MessageBox.Show(string.Format("Failed to read from file path: \"{0}\". Reason: {1} \nUsing default settings instead.", filePath, e.Message), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+			}
+			catch (FormatException e)
+			{
+				MessageBox.Show(string.Format("Failed to read from file path: \"{0}\". Reason: {1} \nUsing default settings instead.", filePath, e.Message), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 			}
 			catch (IOException e)
 			{
-				MessageBox.Show(string.Format("Failed to read from file path: \"{0}\". Reason: {1}", filePath, e.Message), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				MessageBox.Show(string.Format("Failed to read from file path: \"{0}\". Reason: {1} \nUsing default settings instead.", filePath, e.Message), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 			}
 			catch (UnauthorizedAccessException e)
 			{
-				MessageBox.Show(string.Format("Failed to read from file path: \"{0}\". Reason: {1} (File is probably read-only).", filePath, e.Message), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				MessageBox.Show(string.Format("Failed to read from file path: \"{0}\". Reason: {1} (File is probably read-only). \nUsing default settings instead.", filePath, e.Message), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 			}
 			finally
 			{
