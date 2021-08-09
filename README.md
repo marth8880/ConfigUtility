@@ -72,7 +72,9 @@ Consider the following JSON config file:
 
 This would generate the following tabs and dropdown settings:
 
-![Generated settings example](Images/generated-settings-1.png) ![Generated settings example](Images/generated-settings-2.png)
+![Generated settings example](Images/generated-settings-1.png)
+
+![Generated settings example](Images/generated-settings-2.png)
 
 When the player changes a setting value in the app, the value is saved as an integer based on the ordering of the settings in the dropdown, starting at 0.
 
