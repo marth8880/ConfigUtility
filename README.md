@@ -2,11 +2,11 @@
 
 This is a tool that enables Star Wars Battlefront II mod authors to allow players to configure their mods.
 
-Mod authors can set up tabs and dropdown settings through a simple JSON file. When a player changes a setting, the settings are saved and munged into a single .SCRIPT file as a global Lua table. The settings are simple key(string)-value(number) pairs in the table.
+Mod authors can set up tabs and dropdown settings through a simple JSON file, cleverly called `config.json`. When a player changes a setting, the settings are saved and munged into a single `.SCRIPT` file as a global Lua table. The settings are simple key(string)-value(number) pairs in the table.
 
 ## Examples
 
-Consider the following JSON file:
+Consider the following JSON config file:
 
 	{
 	  "fileVersion": 1,
@@ -91,6 +91,6 @@ The file gets re-munged each time "Save Changes" is pressed.
 
 ## Remarks
 
-It is recommended to use a unique Lua table name for mods that would load the munged script into a menu, since more than one script of the same name cannot be loaded into the game at once. The Lua table name can be set via the `userConfigLuaTableName` field in the JSON file.
-
-A way to reasonably guarantee a unique table name would be to simply append the mod's ID to the name, e.g. `gMEUModConfig`.
+* It is recommended to use a unique Lua table name for mods that would load the munged script into a menu (such as in the addme), since more than one script of the same name cannot be loaded into the game at once. The Lua table name can be set via the `userConfigLuaTableName` field in the JSON file. A way to reasonably guarantee a unique table name would be to simply append the mod's ID to the name, e.g. `gMEUModConfig`.
+* Each time you add/remove tabs or flags to the JSON config file, you should increase the `fileVersion` number value. This will reset the internally-saved user config and ensure that invalid/nonexistent settings are being loaded.
+* The name of the munged `.SCRIPT` file can be changed via the `mungedScriptFileName` field in the JSON config file.
