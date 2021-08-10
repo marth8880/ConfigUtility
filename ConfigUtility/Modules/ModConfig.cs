@@ -1,40 +1,82 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Json;
+using System.IO;
 
 namespace ConfigUtility
 {
+	[DataContract]
 	public class ModConfig
 	{
-		public List<ConfigTab> Tabs;
-		public string MungedScriptFileName;
-		public string UserConfigLuaTableName;
+		[DataMember]
+		public double fileVersion;
+
+		[DataMember]
+		public List<ConfigTab> configTabs;
+		[DataMember]
+		public string mungedScriptFileName;
+		[DataMember]
+		public string userConfigLuaTableName;
 
 		public ModConfig()
 		{
-			Tabs = new List<ConfigTab>();
+			configTabs = new List<ConfigTab>();
+		}
+
+		public static ModConfig FromFile(string file)
+		{
+			ModConfig retVal = null;
+			using (System.IO.FileStream fs = new System.IO.FileStream(file, System.IO.FileMode.Open))
+			{
+				DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(ModConfig));
+				retVal = (ModConfig)ser.ReadObject(fs);
+			}
+			return retVal;
+		}
+
+		public static string ToJson(ModConfig config)
+		{
+			DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(ModConfig));
+			StringBuilder builder = new StringBuilder();
+			MemoryStream ms = new MemoryStream();
+			ser.WriteObject(ms, config);
+			String retVal = System.Text.Encoding.Default.GetString(ms.ToArray());
+			return retVal;
 		}
 	}
 
+	[DataContract]
 	public class ConfigTab
 	{
-		public string Name;
-		public List<ConfigFlag> Flags;
-		public string Description;
-		public string FootNote;
+		[DataMember]
+		public string name;
+		[DataMember]
+		public List<ConfigFlag> flags;
+		[DataMember]
+		public string description;
+		[DataMember]
+		public string footNote;
 
 		public ConfigTab()
 		{
-			Flags = new List<ConfigFlag>();
+			flags = new List<ConfigFlag>();
 		}
 	}
 
+	[DataContract]
 	public class ConfigFlag
 	{
-		public string Name;
-		public string Path;
-		public string ToolTipCaption = "";
-		public string[] Values;
-		public int DefaultValue;
+		[DataMember]
+		public string name;
+		[DataMember]
+		public string path;
+		[DataMember]
+		public string toolTipCaption = "";
+		[DataMember]
+		public string[] values;
+		[DataMember]
+		public int defaultValue;
 	}
 }
