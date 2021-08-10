@@ -123,6 +123,14 @@ This would then be munged into a file called `modconfig.script`, which can then 
 
 The file gets re-munged each time "Save Changes" is pressed.
 
+## Implementing
+
+To use the Configuration Utility in your mod, download the latest release binaries and unzip them into a `ConfigUtility` folder someplace in your mod's addon folder. 
+
+Set up the `config.json` file as described in the Examples and Setup sections. Then, run `ConfigUtility.exe` and save the changes to munge the initial `.SCRIPT` file, which gets generated in the application's folder.
+
+In one of the Lua scripts in your mod, load the `.SCRIPT` file with `ReadDataFile` (the same way you'd load a `LVL` file) followed by `ScriptCB_DoFile` (the script name you pass into which is the same as the `.SCRIPT` file name). Reference the settings table by the name specified in `userConfigLuaTableName` and the individual setting paths. For example, if the `userConfigLuaTableName` is `gModConfig` and you have a setting whose `path` is `cfg_AIHeroes`, you'd get the value of that setting through `gModConfig.cfg_AIHeroes`. The setting values are numbers that can be easily compared with an if statement.
+
 ## Remarks
 
 * `config.json` must be located in the same folder as `ConfigUtility.exe`. Without it the application cannot function.
