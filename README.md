@@ -1,4 +1,4 @@
-# Configuration Utility
+# Mod Configurator
 
 This is a tool that enables Star Wars Battlefront II mod authors to allow players to configure their mods.
 
@@ -35,6 +35,13 @@ An object in the `flags` array can have the following fields:
 | toolTipCaption | String | No | Text description of the setting that gets displayed in a tooltip bubble when hovering over the setting's dropdown or name label |  
 | values | Array (strings) | Yes | Text names of the setting's possible values, which are shown in the dropdown menu box |  
 | defaultValue | Integer | Yes | Default value for the setting, which corresponds with the ordering of the `values` array elements - for example, in an array of `["Apple, "Banana", "Orange"]`, a `defaultValue` of 2 would make the default setting `Orange` |  
+
+### Remarks
+
+* `config.json` must be located in the same folder as `ConfigUtility.exe`. Without it the application cannot function.
+* It is recommended to use a unique Lua table name for mods that would load the munged script into a menu (such as in the addme), since more than one script of the same name cannot be loaded into the game at once. The Lua table name can be set via the `userConfigLuaTableName` field in the JSON file. A way to reasonably guarantee a unique table name would be to simply append the mod's ID to the name, e.g. `gMEUModConfig`.
+* Each time you add/remove tabs or flags to the JSON config file, you should increase the `fileVersion` number value. This will reset the internally-saved user config and ensure that invalid/nonexistent settings are being loaded.
+* The most common mistakes when setting up the JSON file are missing commas and incorrect types of braces. The application will throw an exception when it encounters one of these issues, and will typically tell you the key path and line number where the issue is at. Additionally, these errors are pointed out for you when using a sophisticated code editor like VS Code.
 
 ## Examples
 
@@ -125,15 +132,13 @@ The file gets re-munged each time "Save Changes" is pressed.
 
 ## Implementing
 
-To use the Configuration Utility in your mod, download the latest release binaries and unzip them into a `ConfigUtility` folder someplace in your mod's addon folder. 
+To use the Mod Configurator in your mod, download the latest release binaries and unzip them into a `ConfigUtility` folder someplace in your mod's addon folder. 
 
-Set up the `config.json` file as described in the Examples and Setup sections. Then, run `ConfigUtility.exe` and save the changes to munge the initial `.SCRIPT` file, which gets generated in the application's folder.
+Open `config.json` in a text editor (Notepad++ or VS Code recommended) and set up the file as described in the [Setup](#setting-up-a-mod-configuration) and [Examples](#examples) sections. Then, run `ConfigUtility.exe`, which will automatically munge the initial `.SCRIPT` file, which gets generated in the application's folder.
 
-In one of the Lua scripts in your mod, load the `.SCRIPT` file with `ReadDataFile` (the same way you'd load a `LVL` file) followed by `ScriptCB_DoFile` (the script name you pass into which is the same as the `.SCRIPT` file name). Reference the settings table by the name specified in `userConfigLuaTableName` and the individual setting paths. For example, if the `userConfigLuaTableName` is `gModConfig` and you have a setting whose `path` is `cfg_AIHeroes`, you'd get the value of that setting through `gModConfig.cfg_AIHeroes`. The setting values are numbers that can be easily compared with an if statement.
+In one of the Lua scripts in your mod, load the `.SCRIPT` file with `ReadDataFile` (the same way you'd load a `LVL` file) followed by `ScriptCB_DoFile` (passing in the name of the `.SCRIPT` file without the file extension). Reference the settings table by the name specified in `userConfigLuaTableName` and the individual setting paths. For example, if the `userConfigLuaTableName` is `gModConfig` and you have a setting whose `path` is `cfg_AIHeroes`, you'd get the value of that setting through `gModConfig.cfg_AIHeroes`. The setting values are numbers that can be easily compared with an if statement.
 
-## Remarks
+### Remarks
 
-* `config.json` must be located in the same folder as `ConfigUtility.exe`. Without it the application cannot function.
-* It is recommended to use a unique Lua table name for mods that would load the munged script into a menu (such as in the addme), since more than one script of the same name cannot be loaded into the game at once. The Lua table name can be set via the `userConfigLuaTableName` field in the JSON file. A way to reasonably guarantee a unique table name would be to simply append the mod's ID to the name, e.g. `gMEUModConfig`.
-* Each time you add/remove tabs or flags to the JSON config file, you should increase the `fileVersion` number value. This will reset the internally-saved user config and ensure that invalid/nonexistent settings are being loaded.
-* The name of the munged `.SCRIPT` file can be changed via the `mungedScriptFileName` field in the JSON config file.
+* Several measures have been put in place to prevent errors in a mod's config, such as displaying (mostly) useful error messages when needed. It's probably not perfect, but it should prevent most user (and mod author) errors.
+* Lua script errors should not be possible, but in case they do arise, the `ScriptMunge.log` file in the `bin` folder will let you know.
