@@ -137,12 +137,14 @@ namespace ConfigUtility
 
 			// Remove the template tab page
 			tabControl1.Controls.Remove(tabPage1);
+
+			// Perform an initial munge on application start
+			SaveUserConfig();
 		}
 
 		private void btn_SaveChanges_Click(object sender, EventArgs e)
 		{
 			SaveUserConfig();
-			btn_SaveChanges.Enabled = false;
 		}
 
 		private void btn_ResetToDefaults_Click(object sender, EventArgs e)
