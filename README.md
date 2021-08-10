@@ -119,7 +119,7 @@ Example of a Lua script that is generated and munged from a player's config (bas
 		cfg_AIHeroes = 1,				-- Enabled
 	}
 
-This would then be munged into a file called `modconfig.script`, which can then be loaded into the game with `ScriptCB_DoFile`. The table's values could then be accessed by `gModConfig.cfg_MEUnificationEnabled` etc.
+This would then be munged into a file called `modconfig.script`, which can then be loaded into the game with `ReadDataFile` followed by `ScriptCB_DoFile`. The table's values could then be accessed by `gModConfig.cfg_MEUnificationEnabled` etc.
 
 The file gets re-munged each time "Save Changes" is pressed.
 
