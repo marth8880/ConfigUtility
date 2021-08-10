@@ -32,10 +32,11 @@ namespace ConfigUtility
 
 			// Load any existing config
 			bool configSaved = LoadUserConfig();
-			modConfig = JsonHandler.ParseConfigJson();
+			string configPath = Directory.GetCurrentDirectory() + "\\config.json";
+			modConfig = ModConfig.FromFile(configPath);
 
 			// Generate the tab pages
-			foreach (ConfigTab configTab in modConfig.Tabs)
+			foreach (ConfigTab configTab in modConfig.configTabs)
 			{
 				TabPage tabPage = new TabPage();
 
@@ -47,21 +48,21 @@ namespace ConfigUtility
 				Label footNoteLabel = (Label)configTabControl.Controls.Find("lbl_FootNote", true)[0];
 				FlowLayoutPanel flowLayoutPanel = (FlowLayoutPanel)configTabControl.Controls.Find("flow_Flags", true)[0];
 
-				descriptionLabel.Text = configTab.Description;
-				footNoteLabel.Text = configTab.FootNote;
+				descriptionLabel.Text = configTab.description;
+				footNoteLabel.Text = configTab.footNote;
 
 				// Construct the tab page control (this is very dumb)
 				tabPage.Controls.Add(configTabControl);
 				tabPage.Location = new Point(4, 34);
-				tabPage.Name = "tabPage_" + configTab.Name;
+				tabPage.Name = "tabPage_" + configTab.name;
 				tabPage.Padding = tabPage1.Padding;
 				tabPage.Size = tabPage1.Size;
 				tabPage.TabIndex = 0;
-				tabPage.Text = configTab.Name;
+				tabPage.Text = configTab.name;
 				tabPage.UseVisualStyleBackColor = true;
 
 				// Generate the flag dropdowns
-				foreach (ConfigFlag configFlag in configTab.Flags)
+				foreach (ConfigFlag configFlag in configTab.flags)
 				{
 					ConfigFlagControl configFlagControl = new ConfigFlagControl();
 					configFlagControl.Size = new Size(tabPage.Size.Width - 50, configFlagControl.Size.Height);
@@ -70,46 +71,46 @@ namespace ConfigUtility
 					Label flagNameLabel = (Label)configFlagControl.Controls.Find("lbl_FlagName", true)[0];
 					ComboBox flagValueCombo = (ComboBox)configFlagControl.Controls.Find("cmb_FlagValue", true)[0];
 
-					flagNameLabel.Text = configFlag.Name;
+					flagNameLabel.Text = configFlag.name;
 					flagValueCombo.Items.Clear();
-					flagValueCombo.Items.AddRange(configFlag.Values);
+					flagValueCombo.Items.AddRange(configFlag.values);
 					flagValueCombo.Tag = configFlag;
 
-					if (configFlag.ToolTipCaption != "")
+					if (configFlag.toolTipCaption != "")
 					{
-						toolTips.SetToolTip(flagNameLabel, configFlag.ToolTipCaption);
-						toolTips.SetToolTip(flagValueCombo, configFlag.ToolTipCaption);
+						toolTips.SetToolTip(flagNameLabel, configFlag.toolTipCaption);
+						toolTips.SetToolTip(flagValueCombo, configFlag.toolTipCaption);
 					}
 
 					// Ensure the key exists in our local user config dictionary
-					if (!modConfigContainer.UserConfig.ContainsKey(configFlag.Path))
-						modConfigContainer.UserConfig.Add(configFlag.Path, configFlag.DefaultValue);
+					if (!modConfigContainer.UserConfig.ContainsKey(configFlag.path))
+						modConfigContainer.UserConfig.Add(configFlag.path, configFlag.defaultValue);
 
 					// Ensure a higher value than possible wasn't set in the saved config
 					// This needs to happen BEFORE adding the event handler otherwise it'll raise it
-					if (modConfigContainer.UserConfig[configFlag.Path] >= configFlag.Values.Length)
-						flagValueCombo.SelectedIndex = configFlag.DefaultValue;
+					if (modConfigContainer.UserConfig[configFlag.path] >= configFlag.values.Length)
+						flagValueCombo.SelectedIndex = configFlag.defaultValue;
 					else
-						flagValueCombo.SelectedIndex = modConfigContainer.UserConfig[configFlag.Path];
+						flagValueCombo.SelectedIndex = modConfigContainer.UserConfig[configFlag.path];
 
 					// Whenever the combobox selection changes, either programmatically or by the user
-					flagValueCombo.SelectedIndexChanged += delegate (object sender, EventArgs e)
+					flagValueCombo.SelectedIndexChanged += delegate (object sender2, EventArgs eArgs)
 					{
-						ComboBox comboBox = (ComboBox)sender;
+						ComboBox comboBox = (ComboBox)sender2;
 						ConfigFlag senderConfigFlag = (ConfigFlag)comboBox.Tag;
 						int oldValue = -1;
-						if (modConfigContainer.UserConfig.ContainsKey(senderConfigFlag.Path))
+						if (modConfigContainer.UserConfig.ContainsKey(senderConfigFlag.path))
 						{
-							oldValue = modConfigContainer.UserConfig[senderConfigFlag.Path];
-							modConfigContainer.UserConfig[senderConfigFlag.Path] = comboBox.SelectedIndex;
+							oldValue = modConfigContainer.UserConfig[senderConfigFlag.path];
+							modConfigContainer.UserConfig[senderConfigFlag.path] = comboBox.SelectedIndex;
 						}
 						else
 						{
-							modConfigContainer.UserConfig.Add(senderConfigFlag.Path, comboBox.SelectedIndex);
+							modConfigContainer.UserConfig.Add(senderConfigFlag.path, comboBox.SelectedIndex);
 						}
 						
 						ConfigIsDirty();
-						Debug.WriteLine(string.Format("Selection index for {0} changed from {1} to {2}", senderConfigFlag.Name, oldValue, comboBox.SelectedIndex));
+						Debug.WriteLine(string.Format("Selection index for {0} changed from {1} to {2}", senderConfigFlag.name, oldValue, comboBox.SelectedIndex));
 					};
 
 					/// TODO: The width of all ComboBoxes in a tab page should be based on the widest one 
@@ -137,14 +138,12 @@ namespace ConfigUtility
 
 			// Remove the template tab page
 			tabControl1.Controls.Remove(tabPage1);
-
-			// Perform an initial munge on application start
-			SaveUserConfig();
 		}
 
 		private void btn_SaveChanges_Click(object sender, EventArgs e)
 		{
 			SaveUserConfig();
+			btn_SaveChanges.Enabled = false;
 		}
 
 		private void btn_ResetToDefaults_Click(object sender, EventArgs e)
@@ -318,7 +317,7 @@ namespace ConfigUtility
 
 		void MungeChanges()
 		{
-			string luaScriptFileName = modConfig.MungedScriptFileName + ".lua";
+			string luaScriptFileName = modConfig.mungedScriptFileName + ".lua";
 			string luaScriptPath = Directory.GetCurrentDirectory() + "\\" + luaScriptFileName;
 
 			// Create the Lua script
@@ -329,7 +328,7 @@ namespace ConfigUtility
 			StreamWriter streamWriter = new StreamWriter(fs);
 
 			// Write the config table to the script
-			streamWriter.WriteLine(modConfig.UserConfigLuaTableName + " = {");
+			streamWriter.WriteLine(modConfig.userConfigLuaTableName + " = {");
 			foreach (KeyValuePair<string, int> flag in modConfigContainer.UserConfig)
 			{
 				string line = flag.Key + " = " + flag.Value + ",";
@@ -340,16 +339,19 @@ namespace ConfigUtility
 			fs.Close();
 
 			// Munge!
+			List<string> createdFiles = EnsureScriptMungeExists();
 			ProcessStartInfo processStartInfo = new ProcessStartInfo();
 			processStartInfo.FileName = Directory.GetCurrentDirectory() + "\\ScriptMunge.exe";
 			processStartInfo.Arguments = string.Format("-inputfile {0} -continue -platform PC -verbose -debug -outputdir {1}",
 				luaScriptFileName,
 				Directory.GetCurrentDirectory());
 			processStartInfo.CreateNoWindow = true;
+			processStartInfo.UseShellExecute = false;
 			processStartInfo.RedirectStandardOutput = true;
 
 			Process process = new Process();
 			process.StartInfo = processStartInfo;
+			
 			process.EnableRaisingEvents = true;
 			process.OutputDataReceived += (sender, e) =>
 			{
@@ -359,11 +361,55 @@ namespace ConfigUtility
 			{
 				Trace.WriteLine("ScriptMunge finished with exit code " + process.ExitCode + ", cleaning up");
 				File.Delete(luaScriptPath);
+				foreach(string file in createdFiles)
+					File.Delete(file);
+				
+				string logFile = Directory.GetCurrentDirectory() + "\\ScriptMunge.log";
+				if (File.Exists(logFile))
+					File.Delete(logFile);
+
 				DisableWorkingStatus();
 			};
 
 			EnableWorkingStatus();
 			process.Start();
+		}
+
+		/// <summary>
+		/// Ensures that scriptmunge and luac exist.
+		/// Returns an array of the files created so that the caller can know which files to delete; we wouldn't want to delete 
+		/// a file that was already there.
+		/// </summary>
+		private List<String> EnsureScriptMungeExists()
+		{
+			List<string> retVal = new List<string>();
+
+			string scriptMunge = Directory.GetCurrentDirectory() + "\\ScriptMunge.exe";
+			string luac = Directory.GetCurrentDirectory() + "\\luac.exe";
+			if (!File.Exists(scriptMunge))
+			{
+				string scriptMungeResourceName = "ConfigUtility.ScriptMunge.exe";
+				SaveResourceToFile(scriptMungeResourceName, scriptMunge);
+				retVal.Add(scriptMunge);
+			}
+			if (!File.Exists(luac))
+			{
+				string luacResourceName = "ConfigUtility.luac.exe";
+				SaveResourceToFile(luacResourceName, luac);
+				retVal.Add(luac);
+			}
+			return retVal;
+		}
+
+		private void SaveResourceToFile(string resourceName, string localFileName)
+		{
+			System.Reflection.Assembly ass = System.Reflection.Assembly.GetExecutingAssembly();
+			string[] resourceNames = ass.GetManifestResourceNames(); //uncomment to inspect embedded resources 
+			Stream stream = ass.GetManifestResourceStream(resourceName);
+			byte[] buff = new byte[stream.Length];
+			stream.Seek(0, SeekOrigin.Begin);
+			stream.Read(buff, 0, (int)stream.Length);
+			File.WriteAllBytes(localFileName, buff);
 		}
 
 		void EnableWorkingStatus()
@@ -424,7 +470,7 @@ namespace ConfigUtility
 			foreach (ComboBox comboBox in comboBoxes)
 			{
 				ConfigFlag configFlag = (ConfigFlag)comboBox.Tag;
-				comboBox.SelectedIndex = configFlag.DefaultValue;
+				comboBox.SelectedIndex = configFlag.defaultValue;
 			}
 
 			ConfigIsDirty();
