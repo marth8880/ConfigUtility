@@ -8,7 +8,7 @@ Mod authors can set up tabs and dropdown settings through a simple JSON file, cl
 
 The tabs and settings are configured through the bundled `config.json` file. Please see [HERE](https://cheatography.com/gaston/cheat-sheets/json/ "JSON cheat sheet") for more about JSON file syntax (but really it's pretty simple).
 
-Under the first pair of brackets, here are the following fields:
+Inside the initial pair of brackets, here are the following fields:
 
 | Field | Type | Required | Comment |  
 |---|---|---|---|  
