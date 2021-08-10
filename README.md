@@ -1,3 +1,5 @@
+![App banner](Images/app_banner_horizontal.jpg)
+
 # Mod Configurator
 
 This is a tool that enables Star Wars Battlefront II mod authors to allow players to configure their mods.
