@@ -14,12 +14,12 @@ namespace ConfigUtility
 	public partial class ConfigUtilityForm : Form
 	{
 		public const string CONFIG_SAVE_FILE_NAME = "ConfigUtility.dat";
-		public const string PROJECT_URL = "https://github.com/marth8880/ConfigUtility";
+		public const string PROJECT_URL = "https://github.com/marth8880/ModConfigurator";
 
 		public ModConfig modConfig = new ModConfig();
 
 		ModConfigContainer modConfigContainer = new ModConfigContainer();
-		List<ComboBox> comboBoxes = new List<ComboBox>();
+		List<ComboBox> allComboBoxes = new List<ComboBox>();
 
 		public ConfigUtilityForm()
 		{
@@ -40,6 +40,8 @@ namespace ConfigUtility
 			// Generate the tab pages
 			foreach (ConfigTab configTab in modConfig.configTabs)
 			{
+				configTab.comboBoxes = new List<ComboBox>();
+
 				if (configTab.name == null)
 					modConfig.DefinitionError("new tab", "name");
 				if (configTab.flags == null)
@@ -71,6 +73,8 @@ namespace ConfigUtility
 				// Generate the flag dropdowns
 				foreach (ConfigFlag configFlag in configTab.flags)
 				{
+					configFlag.owningTab = configTab;
+
 					if (configFlag.name == null)
 						modConfig.DefinitionError("new flag", "name");
 					if (configFlag.path == null)
@@ -96,6 +100,9 @@ namespace ConfigUtility
 					flagValueCombo.Items.Clear();
 					flagValueCombo.Items.AddRange(configFlag.values);
 					flagValueCombo.Tag = configFlag;
+					configTab.comboBoxes.Add(flagValueCombo);
+					configFlag.originalComboBoxLocation = flagValueCombo.Location;
+					configFlag.originalComboBoxSize = flagValueCombo.Size;
 
 					if (configFlag.toolTipCaption != "")
 					{
@@ -129,27 +136,17 @@ namespace ConfigUtility
 						{
 							modConfigContainer.UserConfig.Add(senderConfigFlag.path, comboBox.SelectedIndex);
 						}
-						
+
+						SetComboBoxWidths(comboBox, senderConfigFlag);
+
 						ConfigIsDirty();
 						Debug.WriteLine(string.Format("Selection index for {0} changed from {1} to {2}", senderConfigFlag.name, oldValue, comboBox.SelectedIndex));
 					};
 
-					/// TODO: The width of all ComboBoxes in a tab page should be based on the widest one 
-					///  https://github.com/marth8880/ConfigUtility/issues/4
-					// Calculate new size and location of combobox
-					//int extraWidth = 25;	// need to account for the combobox arrow
-					//int newWidth = GetPreferredDropDownWidth(flagValueCombo) + extraWidth;
-					//int widthDifference = 0, newLocationX = 0;
-					//if (newWidth > flagValueCombo.MinimumSize.Width)
-					//{
-					//	widthDifference = newWidth - flagValueCombo.MinimumSize.Width;
-					//	newLocationX = flagValueCombo.Location.X - widthDifference;
-					//	flagValueCombo.Location = new Point(newLocationX, flagValueCombo.Location.Y);
-					//	flagValueCombo.Size = new Size(newWidth, flagValueCombo.Size.Height);
-					//}
-					//flagValueCombo.DropDownWidth = newWidth;
 					flagValueCombo.DropDownWidth = GetPreferredDropDownWidth(flagValueCombo);
-					comboBoxes.Add(flagValueCombo);
+					allComboBoxes.Add(flagValueCombo);
+
+					SetComboBoxWidths(flagValueCombo, configFlag);
 
 					flowLayoutPanel.Controls.Add(configFlagControl);
 				}
@@ -179,6 +176,36 @@ namespace ConfigUtility
 		{
 			Forms.AboutBox aboutBox = new Forms.AboutBox();
 			aboutBox.ShowDialog();
+		}
+
+		private void SetComboBoxWidths(ComboBox comboBox, ConfigFlag senderConfigFlag)
+		{
+			// The width of all ComboBoxes in a tab page should be based on the widest one
+			List<int> boxWidths = new List<int>();
+			foreach (ComboBox tabComboBox in senderConfigFlag.owningTab.comboBoxes)
+			{
+				boxWidths.Add(TextRenderer.MeasureText(tabComboBox.SelectedItem.ToString(), tabComboBox.Font).Width);
+			}
+			boxWidths.Sort();
+
+			// Calculate new size and location of combobox
+			Point newLocation = senderConfigFlag.originalComboBoxLocation;
+			Size newSize = senderConfigFlag.originalComboBoxSize;
+			int extraWidth = 20;    // need to account for the combobox arrow (no magic numbers allowed, don't remove)
+			int newWidth = boxWidths[boxWidths.Count - 1] + extraWidth;
+			if (newWidth > comboBox.MinimumSize.Width)
+			{
+				int widthDifference = newWidth - comboBox.MinimumSize.Width;
+				int newLocationX = senderConfigFlag.originalComboBoxLocation.X - widthDifference;
+				newLocation = new Point(newLocationX, comboBox.Location.Y);
+				newSize = new Size(newWidth, comboBox.Size.Height);
+			}
+
+			foreach (ComboBox tabComboBox in senderConfigFlag.owningTab.comboBoxes)
+			{
+				tabComboBox.Location = newLocation;
+				tabComboBox.Size = newSize;
+			}
 		}
 
 		// Adapted from https://stackoverflow.com/a/4842576
@@ -491,7 +518,7 @@ namespace ConfigUtility
 
 		void ResetToDefaults()
 		{
-			foreach (ComboBox comboBox in comboBoxes)
+			foreach (ComboBox comboBox in allComboBoxes)
 			{
 				ConfigFlag configFlag = (ConfigFlag)comboBox.Tag;
 				comboBox.SelectedIndex = configFlag.defaultValue;

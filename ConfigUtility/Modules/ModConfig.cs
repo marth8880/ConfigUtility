@@ -78,9 +78,12 @@ namespace ConfigUtility
 		[DataMember]
 		public string footnote;
 
+		public List<ComboBox> comboBoxes;
+
 		public ConfigTab()
 		{
 			flags = new List<ConfigFlag>();
+			comboBoxes = new List<ComboBox>();
 		}
 	}
 
@@ -97,5 +100,9 @@ namespace ConfigUtility
 		public string[] values;
 		[DataMember]
 		public int defaultValue;
+
+		public ConfigTab owningTab;
+		public System.Drawing.Point originalComboBoxLocation;
+		public System.Drawing.Size originalComboBoxSize;
 	}
 }
