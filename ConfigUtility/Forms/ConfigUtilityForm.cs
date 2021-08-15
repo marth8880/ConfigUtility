@@ -65,7 +65,7 @@ namespace ConfigUtility
 				foreach (ConfigFlag configFlag in configTab.flags)
 				{
 					ConfigFlagControl configFlagControl = new ConfigFlagControl();
-					configFlagControl.Size = new Size(tabPage.Size.Width - 50, configFlagControl.Size.Height);
+					configFlagControl.Size = new Size(tabPage.Size.Width - 30, configFlagControl.Size.Height);
 
 					// Gather and set the UI controls
 					Label flagNameLabel = (Label)configFlagControl.Controls.Find("lbl_FlagName", true)[0];

@@ -42,10 +42,11 @@ namespace ConfigUtility
 			this.cmb_FlagValue.Items.AddRange(new object[] {
             "Disabled",
             "Enabled"});
-			this.cmb_FlagValue.Location = new System.Drawing.Point(484, 6);
-			this.cmb_FlagValue.MinimumSize = new System.Drawing.Size(182, 0);
+			this.cmb_FlagValue.Location = new System.Drawing.Point(436, 5);
+			this.cmb_FlagValue.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+			this.cmb_FlagValue.MinimumSize = new System.Drawing.Size(164, 0);
 			this.cmb_FlagValue.Name = "cmb_FlagValue";
-			this.cmb_FlagValue.Size = new System.Drawing.Size(182, 33);
+			this.cmb_FlagValue.Size = new System.Drawing.Size(164, 28);
 			this.cmb_FlagValue.TabIndex = 4;
 			this.cmb_FlagValue.Tag = "optionValue";
 			// 
@@ -54,21 +55,22 @@ namespace ConfigUtility
 			this.lbl_FlagName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
 			this.lbl_FlagName.AutoSize = true;
-			this.lbl_FlagName.Location = new System.Drawing.Point(8, 9);
+			this.lbl_FlagName.Location = new System.Drawing.Point(7, 7);
 			this.lbl_FlagName.Name = "lbl_FlagName";
-			this.lbl_FlagName.Size = new System.Drawing.Size(59, 25);
+			this.lbl_FlagName.Size = new System.Drawing.Size(51, 20);
 			this.lbl_FlagName.TabIndex = 3;
 			this.lbl_FlagName.Tag = "optionName";
 			this.lbl_FlagName.Text = "label3";
 			// 
 			// ConfigFlagControl
 			// 
-			this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
+			this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.Controls.Add(this.cmb_FlagValue);
 			this.Controls.Add(this.lbl_FlagName);
+			this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
 			this.Name = "ConfigFlagControl";
-			this.Size = new System.Drawing.Size(674, 45);
+			this.Size = new System.Drawing.Size(607, 40);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 

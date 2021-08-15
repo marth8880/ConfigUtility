@@ -56,7 +56,7 @@ namespace ConfigUtility.Forms
 			this.tableLayoutPanel.Controls.Add(this.okButton, 1, 5);
 			this.tableLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel.Location = new System.Drawing.Point(13, 13);
-			this.tableLayoutPanel.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
+			this.tableLayoutPanel.Margin = new System.Windows.Forms.Padding(5);
 			this.tableLayoutPanel.Name = "tableLayoutPanel";
 			this.tableLayoutPanel.RowCount = 6;
 			this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10F));
@@ -73,7 +73,7 @@ namespace ConfigUtility.Forms
 			this.logoPictureBox.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.logoPictureBox.Image = global::ConfigUtility.Properties.Resources.app_banner;
 			this.logoPictureBox.Location = new System.Drawing.Point(5, 5);
-			this.logoPictureBox.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
+			this.logoPictureBox.Margin = new System.Windows.Forms.Padding(5);
 			this.logoPictureBox.Name = "logoPictureBox";
 			this.tableLayoutPanel.SetRowSpan(this.logoPictureBox, 6);
 			this.logoPictureBox.Size = new System.Drawing.Size(196, 399);
@@ -149,7 +149,7 @@ namespace ConfigUtility.Forms
 			this.okButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.okButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			this.okButton.Location = new System.Drawing.Point(509, 371);
-			this.okButton.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
+			this.okButton.Margin = new System.Windows.Forms.Padding(5);
 			this.okButton.Name = "okButton";
 			this.okButton.Size = new System.Drawing.Size(113, 33);
 			this.okButton.TabIndex = 24;
@@ -163,11 +163,11 @@ namespace ConfigUtility.Forms
 			this.ClientSize = new System.Drawing.Size(653, 435);
 			this.Controls.Add(this.tableLayoutPanel);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-			this.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
+			this.Margin = new System.Windows.Forms.Padding(5);
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
 			this.Name = "AboutBox";
-			this.Padding = new System.Windows.Forms.Padding(13, 13, 13, 13);
+			this.Padding = new System.Windows.Forms.Padding(13);
 			this.ShowIcon = false;
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
