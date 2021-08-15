@@ -4,6 +4,7 @@ using System.Text;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
 using System.IO;
+using System.Windows.Forms;
 
 namespace ConfigUtility
 {
@@ -45,6 +46,24 @@ namespace ConfigUtility
 			String retVal = System.Text.Encoding.Default.GetString(ms.ToArray());
 			return retVal;
 		}
+
+		public void DefinitionError(string parentName, string valueType)
+		{
+			MessageBox.Show(string.Format("config.json: No or invalid '{0}' definition was found for '{1}'.", valueType, parentName), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+			Environment.Exit(4);
+		}
+
+		public void ValueError(string parentName, string flagName)
+		{
+			MessageBox.Show(string.Format("config.json: Invalid '{0}' value specified for '{1}'.", flagName, parentName), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+			Environment.Exit(4);
+		}
+
+		public void GeneralError(string message)
+		{
+			MessageBox.Show(string.Format("config.json: {0}", message), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+			Environment.Exit(4);
+		}
 	}
 
 	[DataContract]
@@ -57,7 +76,7 @@ namespace ConfigUtility
 		[DataMember]
 		public string description;
 		[DataMember]
-		public string footNote;
+		public string footnote;
 
 		public ConfigTab()
 		{

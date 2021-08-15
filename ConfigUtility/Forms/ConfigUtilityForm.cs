@@ -38,6 +38,11 @@ namespace ConfigUtility
 			// Generate the tab pages
 			foreach (ConfigTab configTab in modConfig.configTabs)
 			{
+				if (configTab.name == null)
+					modConfig.DefinitionError("new tab", "name");
+				if (configTab.flags == null)
+					modConfig.DefinitionError(configTab.name, "flags");
+
 				TabPage tabPage = new TabPage();
 
 				ConfigTabControl configTabControl = new ConfigTabControl();
@@ -49,7 +54,7 @@ namespace ConfigUtility
 				FlowLayoutPanel flowLayoutPanel = (FlowLayoutPanel)configTabControl.Controls.Find("flow_Flags", true)[0];
 
 				descriptionLabel.Text = configTab.description;
-				footNoteLabel.Text = configTab.footNote;
+				footNoteLabel.Text = configTab.footnote;
 
 				// Construct the tab page control (this is very dumb)
 				tabPage.Controls.Add(configTabControl);
@@ -64,6 +69,20 @@ namespace ConfigUtility
 				// Generate the flag dropdowns
 				foreach (ConfigFlag configFlag in configTab.flags)
 				{
+					if (configFlag.name == null)
+						modConfig.DefinitionError("new flag", "name");
+					if (configFlag.path == null)
+						modConfig.DefinitionError(configFlag.name, "path");
+					if (configFlag.values == null)
+						modConfig.DefinitionError(configFlag.name, "values");
+					//if (configFlag.defaultValue == null)
+					//	modConfig.DefinitionError(configFlag.name, "defaultValue");
+
+					if (configFlag.values.Length == 0)
+					{
+						modConfig.ValueError(configFlag.name, "values");
+					}
+
 					ConfigFlagControl configFlagControl = new ConfigFlagControl();
 					configFlagControl.Size = new Size(tabPage.Size.Width - 30, configFlagControl.Size.Height);
 
