@@ -33,6 +33,8 @@ namespace ConfigUtility
 			// Load any existing config
 			bool configSaved = LoadUserConfig();
 			string configPath = Directory.GetCurrentDirectory() + "\\config.json";
+			if (!File.Exists(configPath))
+				modConfig.GeneralError("Config file not found. Make sure it's located inside the same folder as the application and named correctly.");
 			modConfig = ModConfig.FromFile(configPath);
 
 			// Generate the tab pages
@@ -157,6 +159,9 @@ namespace ConfigUtility
 
 			// Remove the template tab page
 			tabControl1.Controls.Remove(tabPage1);
+
+			// Perform an initial munge on application start
+			SaveUserConfig();
 		}
 
 		private void btn_SaveChanges_Click(object sender, EventArgs e)
