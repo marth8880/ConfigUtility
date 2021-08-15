@@ -126,7 +126,7 @@ namespace ConfigUtility.Forms
 		void SetToolTips()
 		{
 			toolTips.AutoPopDelay = Properties.Settings.Default.TooltipPopDelay;
-			toolTips.SetToolTip(logoPictureBox, "Open Configuration Utility's project page on GitHub in your web browser.");
+			toolTips.SetToolTip(logoPictureBox, "Open Mod Configurator's project page on GitHub in your web browser.");
 		}
 	}
 }
