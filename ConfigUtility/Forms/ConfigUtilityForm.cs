@@ -368,8 +368,11 @@ namespace ConfigUtility
 
 		void MungeChanges()
 		{
+			string tmpDir = Directory.GetCurrentDirectory().Substring(0, 2) + "\\Temp\\tempModConfiguratorMungeFolder";
+			Directory.CreateDirectory(tmpDir);
+
 			string luaScriptFileName = modConfig.mungedScriptFileName + ".lua";
-			string luaScriptPath = Directory.GetCurrentDirectory() + "\\" + luaScriptFileName;
+			string luaScriptPath = tmpDir + "\\" + luaScriptFileName;
 
 			// Create the Lua script
 			FileStream fs = new FileStream(luaScriptPath,
@@ -390,12 +393,13 @@ namespace ConfigUtility
 			fs.Close();
 
 			// Munge!
-			List<string> createdFiles = EnsureScriptMungeExists();
+			List<string> createdFiles = EnsureScriptMungeExists(tmpDir);
 			ProcessStartInfo processStartInfo = new ProcessStartInfo();
-			processStartInfo.FileName = Directory.GetCurrentDirectory() + "\\ScriptMunge.exe";
-			processStartInfo.Arguments = string.Format("-inputfile {0} -continue -platform PC -verbose -debug -outputdir {1}",
-				luaScriptFileName,
-				Directory.GetCurrentDirectory());
+            processStartInfo.FileName = tmpDir + "\\ScriptMunge.exe";
+            processStartInfo.Arguments = string.Format("-inputfile {0} -continue -platform PC -verbose -debug -outputdir {1}",
+                luaScriptFileName,
+                ".");
+			processStartInfo.WorkingDirectory = tmpDir;
 			processStartInfo.CreateNoWindow = true;
 			processStartInfo.UseShellExecute = false;
 			processStartInfo.RedirectStandardOutput = true;
@@ -411,13 +415,18 @@ namespace ConfigUtility
 			process.Exited += (sender, e) =>
 			{
 				Trace.WriteLine("ScriptMunge finished with exit code " + process.ExitCode + ", cleaning up");
-				File.Delete(luaScriptPath);
-				foreach(string file in createdFiles)
-					File.Delete(file);
-				
-				string logFile = Directory.GetCurrentDirectory() + "\\ScriptMunge.log";
-				if (File.Exists(logFile))
-					File.Delete(logFile);
+
+				string sourceFile = tmpDir + "\\" + modConfig.mungedScriptFileName + ".script";
+				string destFile = Directory.GetCurrentDirectory() + "\\" + modConfig.mungedScriptFileName + ".script";
+
+				if (File.Exists(sourceFile))
+				{
+					if (File.Exists(destFile))
+						File.Delete(destFile);
+					File.Move(sourceFile, destFile);
+				}
+
+				Directory.Delete(tmpDir, true);
 
 				DisableWorkingStatus();
 			};
@@ -431,12 +440,12 @@ namespace ConfigUtility
 		/// Returns an array of the files created so that the caller can know which files to delete; we wouldn't want to delete 
 		/// a file that was already there.
 		/// </summary>
-		private List<String> EnsureScriptMungeExists()
+		private List<String> EnsureScriptMungeExists(string workingDirectory)
 		{
 			List<string> retVal = new List<string>();
 
-			string scriptMunge = Directory.GetCurrentDirectory() + "\\ScriptMunge.exe";
-			string luac = Directory.GetCurrentDirectory() + "\\luac.exe";
+			string scriptMunge = workingDirectory + "\\ScriptMunge.exe";
+			string luac = workingDirectory + "\\luac.exe";
 			if (!File.Exists(scriptMunge))
 			{
 				string scriptMungeResourceName = "ConfigUtility.ScriptMunge.exe";
